@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .image-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .image-item {
+            text-align: center;
+        }
+        
+        .image-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .image-item p {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Gallery</h1>
+        <div class="image-gallery">
+            <div class="image-item">
+                <img src="133826_1.webp" alt="Image 1">
+                <p>133826_1.webp</p>
+            </div>
+            <div class="image-item">
+                <img src="133826_2.webp" alt="Image 2">
+                <p>133826_2.webp</p>
+            </div>
+            <div class="image-item">
+                <img src="133826_3.webp" alt="Image 3">
+                <p>133826_3.webp</p>
+            </div>
+            <div class="image-item">
+                <img src="133826_10.webp" alt="Image 10">
+                <p>133826_10.webp</p>
+            </div>
+            <div class="image-item">
+                <img src="133826_11.webp" alt="Image 11">
+                <p>133826_11.webp</p>
+            </div>
+            <div class="image-item">
+                <img src="133826_12.webp" alt="Image 12">
+                <p>133826_12.webp</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
