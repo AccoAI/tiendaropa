@@ -1169,18 +1169,22 @@
             }
         };
 
-        // Mostrar resultado
-        function showResult(imageUrl) {
-            const resultDiv = document.getElementById('result');
-            const resultImage = document.getElementById('result-image');
-            const downloadLink = document.getElementById('download-link');
-            
-            resultImage.src = imageUrl;
-            downloadLink.href = imageUrl;
-            downloadLink.download = `virtual_try_on_${Date.now()}.png`;
-            
-            resultDiv.style.display = 'block';
-        }
+    // Mostrar resultado
+    function showResult(imageUrl) {
+        const resultDiv = document.getElementById('result');
+        const resultImage = document.getElementById('result-image');
+        const downloadLink = document.getElementById('download-link');
+        
+        // Convertir URL relativa a absoluta
+        const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : 
+            XSMLX_CONFIG.backendUrl.replace('/api/process', '') + imageUrl;
+        
+        resultImage.src = fullImageUrl;
+        downloadLink.href = fullImageUrl;
+        downloadLink.download = `virtual_try_on_${Date.now()}.png`;
+        
+        resultDiv.style.display = 'block';
+    }
 
         // Mostrar error
         function showError(message) {
