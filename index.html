@@ -1042,8 +1042,8 @@
                 }
             });
             
-            if (productImages.length > 0) {
-                clothingImages = productImages.slice(0, 3);
+        if (productImages.length > 0) {
+            clothingImages = productImages.slice(0, 10); // Allow up to 10 images
                 
                 let previewHTML = '<h4>Imágenes encontradas:</h4>';
                 clothingImages.forEach((img, index) => {
