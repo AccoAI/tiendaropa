@@ -29,7 +29,7 @@ PASOS PARA CONFIGURAR INSTAGRAM:
         // CONFIGURACIÓN - CAMBIA ESTE VALOR POR TU CLIENT ID REAL
         const XSMLX_CONFIG = {
             backendUrl: 'https://xsmlx.onrender.com',
-            instagramClientId: 'TU_INSTAGRAM_CLIENT_ID_AQUI', // ⚠️ CAMBIAR POR TU CLIENT ID REAL
+            instagramClientId: '674349595036688', // ✅ Client ID configurado
             widgetId: 'xsmlx-widget-' + Math.random().toString(36).substr(2, 9)
         };
     
@@ -347,16 +347,12 @@ PASOS PARA CONFIGURAR INSTAGRAM:
     
         // Login con Instagram
         window.loginWithInstagram = function() {
-            // Verificar que el Client ID esté configurado
-            if (XSMLX_CONFIG.instagramClientId === 'TU_INSTAGRAM_CLIENT_ID_AQUI') {
-                alert('❌ Error: Debes configurar tu Instagram Client ID en el código del snippet.\n\nVe a la línea 25 y cambia "TU_INSTAGRAM_CLIENT_ID_AQUI" por tu Client ID real de Instagram.');
-                return;
-            }
+            // Client ID ya está configurado ✅
             
             const redirectUri = encodeURIComponent(`${XSMLX_CONFIG.backendUrl}/api/instagram/callback`);
-            const scope = 'user_profile,user_media';
+            const scope = 'instagram_basic,instagram_manage_comments,instagram_manage_messages,pages_show_list';
             
-            const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${XSMLX_CONFIG.instagramClientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+            const authUrl = `https://www.facebook.com/v19.0/dialog/oauth?client_id=${XSMLX_CONFIG.instagramClientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
             
             // Abrir ventana de autenticación
             const authWindow = window.open(authUrl, 'instagram-auth', 'width=500,height=600,scrollbars=yes,resizable=yes');
