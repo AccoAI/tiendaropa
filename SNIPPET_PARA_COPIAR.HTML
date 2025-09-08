@@ -29,7 +29,7 @@ PASOS PARA CONFIGURAR INSTAGRAM:
         // CONFIGURACIÓN - CAMBIA ESTE VALOR POR TU CLIENT ID REAL
         const XSMLX_CONFIG = {
             backendUrl: 'https://xsmlx.onrender.com',
-            instagramClientId: '674349595036688', // ✅ Client ID configurado
+            instagramClientId: '4261684534156253', // ✅ Client ID configurado
             widgetId: 'xsmlx-widget-' + Math.random().toString(36).substr(2, 9)
         };
     
@@ -714,23 +714,17 @@ PASOS PARA CONFIGURAR INSTAGRAM:
         document.head.appendChild(style);
     
         // Inicializar widget
-        document.addEventListener('DOMContentLoaded', function() {
+        function initializeWidget() {
             if (!document.getElementById(XSMLX_CONFIG.widgetId)) {
                 document.body.insertAdjacentHTML('beforeend', createXsmlxWidget());
             }
-        });
-    
-        // Si el DOM ya está cargado, inicializar inmediatamente
+        }
+        
+        // Inicializar cuando el DOM esté listo
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                if (!document.getElementById(XSMLX_CONFIG.widgetId)) {
-                    document.body.insertAdjacentHTML('beforeend', createXsmlxWidget());
-                }
-            });
+            document.addEventListener('DOMContentLoaded', initializeWidget);
         } else {
-            if (!document.getElementById(XSMLX_CONFIG.widgetId)) {
-                document.body.insertAdjacentHTML('beforeend', createXsmlxWidget());
-            }
+            initializeWidget();
         }
     
     })();
