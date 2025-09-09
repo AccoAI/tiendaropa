@@ -1532,15 +1532,44 @@
                 // Limpiar imágenes anteriores
                 clothingImages = [];
                 
-                clothingPreview.innerHTML = '<div style="text-align: center; padding: 20px;"><div style="width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div><p>Buscando imágenes de productos...</p></div>';
+                clothingPreview.innerHTML = '<div style="text-align: center; padding: 20px;"><div style="width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div><p>Buscando imágenes del producto actual...</p></div>';
                 
                 // Esperar un poco más para que las imágenes se carguen completamente
                 setTimeout(() => {
-                    const images = document.querySelectorAll('img');
+                    // Determinar qué producto está activo basado en la URL
+                    const currentPath = window.location.pathname;
+                    let activeProductId = 'main-product'; // Por defecto
+                    
+                    if (currentPath.includes('/camisetas')) {
+                        activeProductId = 'camisetas-product';
+                    } else if (currentPath.includes('/casual')) {
+                        activeProductId = 'casual-product';
+                    } else if (currentPath.includes('/formal')) {
+                        activeProductId = 'formal-product';
+                    } else if (currentPath.includes('/deportiva')) {
+                        activeProductId = 'deportiva-product';
+                    } else if (currentPath.includes('/temporada')) {
+                        activeProductId = 'temporada-product';
+                    } else if (currentPath.includes('/hoodie')) {
+                        activeProductId = 'hoodie-product';
+                    }
+                    
+                    // Buscar solo en el contenedor del producto activo
+                    const activeProductContainer = document.getElementById(activeProductId);
+                    let images = [];
+                    
+                    if (activeProductContainer) {
+                        images = activeProductContainer.querySelectorAll('img');
+                        console.log(`🔍 Analizando ${images.length} imágenes del producto activo: ${activeProductId}`);
+                    } else {
+                        // Fallback: buscar en toda la página si no encuentra el contenedor
+                        images = document.querySelectorAll('img');
+                        console.log(`⚠️ No se encontró contenedor ${activeProductId}, analizando todas las imágenes (${images.length})`);
+                    }
+                    
                     const productImages = [];
                     
-                    console.log(`🔍 Analizando ${images.length} imágenes en la página actual: ${window.location.href}`);
-                    console.log(`🔍 URL actual: ${window.location.pathname}`);
+                    console.log(`🔍 URL actual: ${currentPath} - Producto activo: ${activeProductId}`);
                     
                     images.forEach((img, index) => {
                         const src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy');
@@ -1562,9 +1591,9 @@
                     });
                 
                     if (productImages.length > 0) {
-                        clothingImages = productImages.slice(0, 15); // Aumentar a 15 imágenes
+                        clothingImages = productImages.slice(0, 15);
                         
-                        let previewHTML = `<h4>Imágenes encontradas (${clothingImages.length}):</h4>`;
+                        let previewHTML = `<h4>Imágenes del producto actual (${clothingImages.length}):</h4>`;
                         clothingImages.forEach((img, index) => {
                             previewHTML += `
                                 <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: white;">
@@ -1579,21 +1608,21 @@
                         });
                         clothingPreview.innerHTML = previewHTML;
                         
-                        console.log(`✅ ${clothingImages.length} imágenes de productos encontradas y listas para procesar`);
+                        console.log(`✅ ${clothingImages.length} imágenes del producto actual encontradas y listas para procesar`);
                         updateProcessButton();
                     } else {
                         clothingPreview.innerHTML = `
                             <div style="text-align: center; padding: 20px; color: #666;">
-                                <p>❌ No se encontraron imágenes de productos en esta página</p>
-                                <p style="font-size: 12px; margin-top: 10px;">Asegúrate de que las imágenes de productos estén cargadas</p>
+                                <p>❌ No se encontraron imágenes del producto actual</p>
+                                <p style="font-size: 12px; margin-top: 10px;">Producto: ${activeProductId}</p>
                                 <button onclick="extractClothingImages()" style="margin-top: 10px; padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">
                                     🔄 Reintentar
                                 </button>
                             </div>
                         `;
-                        console.log('❌ No se encontraron imágenes de productos');
+                        console.log(`❌ No se encontraron imágenes del producto: ${activeProductId}`);
                     }
-                }, 1000); // Aumentar tiempo de espera a 1 segundo
+                }, 1000);
             }
 
             function isProductImage(src, imgElement) {
