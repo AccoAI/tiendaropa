@@ -372,38 +372,58 @@ CONFIGURACIÓN:
         // Extraer imágenes de prendas
         function extractClothingImages() {
             const clothingPreview = document.getElementById('clothing-preview');
-            const images = document.querySelectorAll('img');
-            const productImages = [];
             
-            images.forEach(img => {
-                const src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy');
-                if (src && isProductImage(src, img)) {
-                    productImages.push({
-                        src: src,
-                        alt: img.alt || 'Producto',
-                        element: img
-                    });
-                }
-            });
+            // Limpiar imágenes anteriores
+            clothingImages = [];
             
-            if (productImages.length > 0) {
-                clothingImages = productImages.slice(0, 10); // Allow up to 10 images
+            // Mostrar loading
+            clothingPreview.innerHTML = '<div style="text-align: center; padding: 20px;"><div style="width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div><p>Buscando imágenes de productos...</p></div>';
+            
+            // Esperar un poco para que las imágenes se carguen
+            setTimeout(() => {
+                const images = document.querySelectorAll('img');
+                const productImages = [];
                 
-                let previewHTML = '<h4>Imágenes encontradas:</h4>';
-                clothingImages.forEach((img, index) => {
-                    previewHTML += `
-                        <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                            <img src="${img.src}" alt="${img.alt}" style="max-width: 100px; max-height: 100px; margin-right: 10px; vertical-align: top;">
-                            <span>Imagen ${index + 1}</span>
-                        </div>
-                    `;
+                console.log(`🔍 Analizando ${images.length} imágenes en la página actual: ${window.location.href}`);
+                
+                images.forEach((img, index) => {
+                    const src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy');
+                    if (src && isProductImage(src, img)) {
+                        // Forzar recarga de imagen para evitar cache
+                        const freshSrc = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
+                        
+                        productImages.push({
+                            src: freshSrc,
+                            originalSrc: src,
+                            alt: img.alt || 'Producto',
+                            element: img
+                        });
+                        
+                        console.log(`✅ Imagen ${index + 1} detectada: ${src}`);
+                    }
                 });
-                clothingPreview.innerHTML = previewHTML;
-                
-                updateProcessButton();
-            } else {
-                clothingPreview.innerHTML = '<p style="color: #666;">No se encontraron imágenes de productos en esta página</p>';
-            }
+            
+                if (productImages.length > 0) {
+                    clothingImages = productImages.slice(0, 10); // Allow up to 10 images
+                    
+                    let previewHTML = `<h4>Imágenes encontradas (${clothingImages.length}):</h4>`;
+                    clothingImages.forEach((img, index) => {
+                        previewHTML += `
+                            <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                                <img src="${img.src}" alt="${img.alt}" style="max-width: 100px; max-height: 100px; margin-right: 10px; vertical-align: top;">
+                                <span>Imagen ${index + 1}</span>
+                            </div>
+                        `;
+                    });
+                    clothingPreview.innerHTML = previewHTML;
+                    
+                    console.log(`✅ ${clothingImages.length} imágenes de productos encontradas`);
+                    updateProcessButton();
+                } else {
+                    clothingPreview.innerHTML = '<p style="color: #666;">No se encontraron imágenes de productos en esta página</p>';
+                    console.log('❌ No se encontraron imágenes de productos');
+                }
+            }, 500); // Esperar 500ms para que las imágenes se carguen
         }
     
         // Determinar si es imagen de producto
@@ -411,34 +431,52 @@ CONFIGURACIÓN:
             const srcLower = src.toLowerCase();
             const altLower = (imgElement.alt || '').toLowerCase();
             const classLower = (imgElement.className || '').toLowerCase();
+            const idLower = (imgElement.id || '').toLowerCase();
             
+            // Patrones a excluir (más estrictos)
             const skipPatterns = [
                 'logo', 'icon', 'banner', 'header', 'footer', 'social',
-                'facebook', 'twitter', 'instagram', 'pinterest',
+                'facebook', 'twitter', 'instagram', 'pinterest', 'youtube',
                 'advertisement', 'ad-', 'sponsor', 'promo', 'favicon',
-                'loading', 'placeholder', 'spinner', 'arrow', 'button'
+                'loading', 'placeholder', 'spinner', 'arrow', 'button',
+                'menu', 'nav', 'sidebar', 'widget', 'tooltip', 'modal',
+                'close', 'back', 'next', 'prev', 'search', 'cart',
+                'user', 'profile', 'avatar', 'notification', 'badge'
             ];
             
+            // Verificar patrones de exclusión
             for (const pattern of skipPatterns) {
-                if (srcLower.includes(pattern) || altLower.includes(pattern) || classLower.includes(pattern)) {
+                if (srcLower.includes(pattern) || altLower.includes(pattern) || 
+                    classLower.includes(pattern) || idLower.includes(pattern)) {
                     return false;
                 }
             }
             
+            // Patrones de productos (más específicos)
             const productPatterns = [
                 'product', 'item', 'clothing', 'dress', 'shirt', 'pants',
                 'jacket', 'sweater', 'shoes', 'bag', 'accessory', 'model',
-                'main', 'gallery', 'hero', 'featured', 'thumbnail'
+                'main', 'gallery', 'hero', 'featured', 'thumbnail', 'image',
+                'photo', 'picture', 'preview', 'zoom', 'large', 'medium'
             ];
             
+            // Verificar patrones de productos
             for (const pattern of productPatterns) {
-                if (srcLower.includes(pattern) || altLower.includes(pattern) || classLower.includes(pattern)) {
+                if (srcLower.includes(pattern) || altLower.includes(pattern) || 
+                    classLower.includes(pattern) || idLower.includes(pattern)) {
                     return true;
                 }
             }
             
+            // Verificar extensiones de imagen válidas
             const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
-            if (imageExtensions.some(ext => srcLower.includes(ext))) {
+            const hasValidExtension = imageExtensions.some(ext => srcLower.includes(ext));
+            
+            // Verificar que la imagen tenga un tamaño mínimo (no sea muy pequeña)
+            const isLargeEnough = imgElement.naturalWidth > 100 && imgElement.naturalHeight > 100;
+            
+            // Si tiene extensión válida y es lo suficientemente grande, probablemente es un producto
+            if (hasValidExtension && isLargeEnough) {
                 return true;
             }
             
