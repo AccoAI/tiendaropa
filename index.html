@@ -1743,10 +1743,18 @@
                     
                     formData.append('page_url', window.location.href);
                     
-                    // Añadir solo URLs únicas de imágenes de ropa (sin timestamp)
+                    // Añadir URLs de imágenes de ropa en múltiples formatos para compatibilidad
                     clothingImages.forEach((img, index) => {
+                        formData.append(`clothing_images[${index}]`, img.originalSrc);
                         formData.append(`clothing_url_${index}`, img.originalSrc);
                     });
+                    
+                    // También añadir como array separado por comas
+                    const clothingUrls = clothingImages.map(img => img.originalSrc).join(',');
+                    formData.append('clothing_urls', clothingUrls);
+                    
+                    // Y como JSON string
+                    formData.append('clothing_images_json', JSON.stringify(clothingImages.map(img => img.originalSrc)));
                     
                     // Añadir metadata adicional
                     formData.append('clothing_count', clothingImages.length.toString());
@@ -1757,8 +1765,15 @@
                         user_photo: userPhotoFile ? 'file' : selectedInstagramPhoto ? 'instagram' : 'none',
                         clothing_images: clothingImages.length,
                         product_type: getCurrentProductType(),
-                        page_url: window.location.href
+                        page_url: window.location.href,
+                        clothing_urls: clothingUrls
                     });
+                    
+                    // Log detallado del FormData
+                    console.log('📋 FormData contents:');
+                    for (let [key, value] of formData.entries()) {
+                        console.log(`  ${key}:`, value);
+                    }
 
                     const response = await fetch(XSMLX_CONFIG.backendUrl, {
                         method: 'POST',
