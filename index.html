@@ -1260,23 +1260,58 @@
                             </div>
 
                             <div style="margin-bottom: 25px; padding: 20px; border: 2px solid #f0f0f0; border-radius: 12px; background: #fafafa;">
-                                <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 12px 0;">📁 Sube tu foto</h3>
+                                <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                                    <span style="background: #667eea; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">1</span>
+                                    Sube tu foto
+                                </h3>
                                 
-                                <input type="file" id="user-photo" accept="image/*" onchange="handleUserPhoto(event)" style="
-                                    width: 100%;
-                                    padding: 12px;
-                                    border: 2px dashed #ddd;
-                                    border-radius: 8px;
-                                    background: white;
-                                    cursor: pointer;
-                                    margin-bottom: 15px;
-                                ">
+                                <!-- Opciones de foto -->
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                                        <input type="radio" name="photo-source" value="upload" checked onchange="togglePhotoSource('upload')" style="margin: 0;">
+                                        <span>📁 Subir archivo</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="radio" name="photo-source" value="instagram" onchange="togglePhotoSource('instagram')" style="margin: 0;">
+                                        <span>📷 Desde Instagram</span>
+                                    </label>
+                                </div>
+                                
+                                <!-- Upload de archivo -->
+                                <div id="upload-section">
+                                    <input type="file" id="user-photo" accept="image/*" onchange="handleUserPhoto(event)" style="
+                                        width: 100%;
+                                        padding: 12px;
+                                        border: 2px dashed #ddd;
+                                        border-radius: 8px;
+                                        background: white;
+                                        cursor: pointer;
+                                        transition: all 0.3s ease;
+                                        text-align: center;
+                                    " onmouseover="this.style.borderColor='#667eea'; this.style.background='#f8f9ff'" onmouseout="this.style.borderColor='#ddd'; this.style.background='white'">
+                                </div>
+                                
+                                <!-- Instagram section -->
+                                <div id="instagram-section" style="display: none;">
+                                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                        <p style="margin: 0 0 10px 0; font-size: 14px; color: #666;">
+                                            <strong>📷 Instagram:</strong> Cargando automáticamente tus fotos de Instagram...
+                                        </p>
+                                    </div>
+                                    <div id="instagram-photos" style="display: none;">
+                                        <h4 style="margin: 0 0 15px 0; color: #333;">Selecciona una foto:</h4>
+                                        <div id="instagram-gallery" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"></div>
+                                    </div>
+                                </div>
                                 
                                 <div id="user-preview" style="margin-top: 15px; text-align: center;"></div>
                             </div>
 
                             <div style="margin-bottom: 25px; padding: 20px; border: 2px solid #f0f0f0; border-radius: 12px; background: #fafafa;">
-                                <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 12px 0;">👕 Foto de la prenda</h3>
+                                <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                                    <span style="background: #667eea; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">2</span>
+                                    Foto de la prenda
+                                </h3>
                                 <div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #bee5eb; font-size: 14px;">
                                     <strong>✅ Automático:</strong> Se extraerá de esta página web
                                 </div>
@@ -1318,6 +1353,8 @@
             // Variables globales
             let userPhotoFile = null;
             let clothingImages = [];
+            let instagramPhotos = [];
+            let selectedInstagramPhoto = null;
 
             window.openXsmlxModal = function(widgetId) {
                 document.getElementById('xsmlx-modal').style.display = 'block';
@@ -1330,10 +1367,33 @@
                 document.body.style.overflow = 'auto';
             };
 
+            // Cambiar fuente de foto
+            window.togglePhotoSource = function(source) {
+                const uploadSection = document.getElementById('upload-section');
+                const instagramSection = document.getElementById('instagram-section');
+                
+                if (source === 'upload') {
+                    uploadSection.style.display = 'block';
+                    instagramSection.style.display = 'none';
+                    selectedInstagramPhoto = null;
+                    userPhotoFile = null;
+                } else if (source === 'instagram') {
+                    uploadSection.style.display = 'none';
+                    instagramSection.style.display = 'block';
+                    userPhotoFile = null;
+                    document.getElementById('user-photo').value = '';
+                    loadInstagramPhotos();
+                }
+                
+                document.getElementById('user-preview').innerHTML = '';
+                updateProcessButton();
+            };
+
             window.handleUserPhoto = function(event) {
                 const file = event.target.files[0];
                 if (file) {
                     userPhotoFile = file;
+                    selectedInstagramPhoto = null;
                     
                     const reader = new FileReader();
                     reader.onload = function(e) {
@@ -1344,6 +1404,101 @@
                     
                     updateProcessButton();
                 }
+            };
+
+            // Cargar fotos de Instagram
+            window.loadInstagramPhotos = async function() {
+                const instagramPhotosDiv = document.getElementById('instagram-photos');
+                const instagramGallery = document.getElementById('instagram-gallery');
+                
+                try {
+                    instagramGallery.innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #E4405F; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
+                            <p style="margin: 0; color: #666;">Cargando fotos de Instagram...</p>
+                        </div>
+                    `;
+                    instagramPhotosDiv.style.display = 'block';
+                    
+                    const response = await fetch(XSMLX_CONFIG.backendUrl.replace('/api/process', '/api/instagram-photos'), {
+                        method: 'GET'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('No se pudieron cargar las fotos de Instagram');
+                    }
+                    
+                    const result = await response.json();
+                    
+                    if (result.success && result.photos) {
+                        instagramPhotos = result.photos;
+                        displayInstagramPhotos();
+                    } else {
+                        throw new Error(result.error || 'No se encontraron fotos de Instagram');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error cargando Instagram:', error);
+                    instagramGallery.innerHTML = `
+                        <div style="text-align: center; padding: 20px; color: #666;">
+                            <p>❌ Error cargando fotos de Instagram</p>
+                            <p style="font-size: 12px;">${error.message}</p>
+                            <p style="font-size: 12px;">Asegúrate de que el backend esté ejecutándose y configurado con Instagram API</p>
+                        </div>
+                    `;
+                }
+            };
+
+            // Mostrar fotos de Instagram
+            function displayInstagramPhotos() {
+                const instagramGallery = document.getElementById('instagram-gallery');
+                
+                if (instagramPhotos.length === 0) {
+                    instagramGallery.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No se encontraron fotos de Instagram</div>';
+                    return;
+                }
+                
+                let galleryHTML = '';
+                instagramPhotos.forEach((photo, index) => {
+                    galleryHTML += `
+                        <div style="border: 2px solid #ddd; border-radius: 8px; padding: 10px; cursor: pointer; transition: all 0.3s ease;" 
+                             onclick="selectInstagramPhoto(${index})" 
+                             onmouseover="this.style.borderColor='#667eea'" 
+                             onmouseout="this.style.borderColor='#ddd'">
+                            <img src="${photo.thumbnail || photo.url}" alt="Instagram Photo" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px;">
+                            <p style="margin: 8px 0 0 0; font-size: 12px; color: #666; text-align: center;">Foto ${index + 1}</p>
+                        </div>
+                    `;
+                });
+                
+                instagramGallery.innerHTML = galleryHTML;
+            }
+
+            // Seleccionar foto de Instagram
+            window.selectInstagramPhoto = function(index) {
+                selectedInstagramPhoto = instagramPhotos[index];
+                userPhotoFile = null;
+                
+                const preview = document.getElementById('user-preview');
+                preview.innerHTML = `
+                    <div style="text-align: center;">
+                        <img src="${selectedInstagramPhoto.url}" alt="Foto de Instagram" style="max-width: 100%; max-height: 200px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                        <p style="margin: 10px 0 0 0; font-size: 14px; color: #666;">✅ Foto de Instagram seleccionada</p>
+                    </div>
+                `;
+                
+                const galleryItems = document.querySelectorAll('#instagram-gallery > div');
+                galleryItems.forEach((item, i) => {
+                    if (i === index) {
+                        item.style.borderColor = '#667eea';
+                        item.style.backgroundColor = '#f0f4ff';
+                    } else {
+                        item.style.borderColor = '#ddd';
+                        item.style.backgroundColor = 'transparent';
+                    }
+                });
+                
+                updateProcessButton();
             };
 
             function extractClothingImages() {
@@ -1448,17 +1603,17 @@
 
             function updateProcessButton() {
                 const processButton = document.getElementById('process-button');
-                const hasUserPhoto = userPhotoFile !== null;
+                const hasUserPhoto = userPhotoFile !== null || selectedInstagramPhoto !== null;
                 const hasClothingImages = clothingImages.length > 0;
                 
                 processButton.disabled = !(hasUserPhoto && hasClothingImages);
             }
 
             window.processImages = async function() {
-                const hasUserPhoto = userPhotoFile !== null;
+                const hasUserPhoto = userPhotoFile !== null || selectedInstagramPhoto !== null;
                 
                 if (!hasUserPhoto || clothingImages.length === 0) {
-                    showError('Por favor, sube tu foto y asegúrate de que se detectaron imágenes de productos');
+                    showError('Por favor, sube tu foto o selecciona una de Instagram, y asegúrate de que se detectaron imágenes de productos');
                     return;
                 }
 
@@ -1470,8 +1625,16 @@
                 try {
                     const formData = new FormData();
                     
-                    formData.append('user_photo', userPhotoFile);
-                    formData.append('photo_source', 'upload');
+                    // Agregar foto del usuario (archivo o Instagram)
+                    if (userPhotoFile) {
+                        formData.append('user_photo', userPhotoFile);
+                        formData.append('photo_source', 'upload');
+                    } else if (selectedInstagramPhoto) {
+                        formData.append('instagram_photo_url', selectedInstagramPhoto.url);
+                        formData.append('instagram_photo_id', selectedInstagramPhoto.id);
+                        formData.append('photo_source', 'instagram');
+                    }
+                    
                     formData.append('page_url', window.location.href);
                     
                     clothingImages.forEach((img, index) => {
