@@ -24,7 +24,7 @@
                     width: 80px;
                     height: 40px;
                     background: white;
-                    border: 2px solid #000;
+                    border: 3px solid #ff0000;
                     border-radius: 8px;
                     cursor: pointer;
                     transition: all 0.3s ease;
@@ -34,8 +34,8 @@
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-weight: 700;
                     font-size: 14px;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)'">
+                    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(255, 0, 0, 0.5)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 8px rgba(255, 0, 0, 0.3)'">
                     <span style="color: #000;">X</span>
                     <span style="color: #ff0000;">S</span>
                     <span style="color: #00ff00;">M</span>
@@ -582,6 +582,7 @@
         });
         
         console.log('XSMLX Widget cargado en:', window.location.href);
+        console.log('Botón XSMLX creado y visible en la página');
     }
 
     // Cargar cuando el DOM esté listo
