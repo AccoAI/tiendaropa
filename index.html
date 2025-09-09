@@ -1205,14 +1205,341 @@
                 `;
             }
 
+            function createXsmlxModal() {
+                return `
+                    <div id="xsmlx-modal" style="
+                        display: none;
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.8);
+                        z-index: 10000;
+                        backdrop-filter: blur(5px);
+                    ">
+                        <div style="
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            background: white;
+                            border-radius: 16px;
+                            padding: 30px;
+                            max-width: 500px;
+                            width: 90%;
+                            max-height: 80vh;
+                            overflow-y: auto;
+                            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                        ">
+                            <button onclick="closeXsmlxModal()" style="
+                                position: absolute;
+                                top: 15px;
+                                right: 20px;
+                                background: none;
+                                border: none;
+                                font-size: 24px;
+                                cursor: pointer;
+                                color: #999;
+                                padding: 5px;
+                                border-radius: 50%;
+                                width: 35px;
+                                height: 35px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">&times;</button>
+                            
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h2 style="font-size: 28px; font-weight: 700; color: #333; margin: 0 0 8px 0;">👕 Prueba Virtual</h2>
+                                <p style="font-size: 16px; color: #666; margin: 0;">Sube tu foto y pruébate esta prenda</p>
+                            </div>
+
+                            <div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #bee5eb; font-size: 14px;">
+                                <strong>✅ Automático:</strong> La foto de la prenda se extraerá de esta página web.
+                            </div>
+
+                            <div style="margin-bottom: 25px; padding: 20px; border: 2px solid #f0f0f0; border-radius: 12px; background: #fafafa;">
+                                <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 12px 0;">📁 Sube tu foto</h3>
+                                
+                                <input type="file" id="user-photo" accept="image/*" onchange="handleUserPhoto(event)" style="
+                                    width: 100%;
+                                    padding: 12px;
+                                    border: 2px dashed #ddd;
+                                    border-radius: 8px;
+                                    background: white;
+                                    cursor: pointer;
+                                    margin-bottom: 15px;
+                                ">
+                                
+                                <div id="user-preview" style="margin-top: 15px; text-align: center;"></div>
+                            </div>
+
+                            <div style="margin-bottom: 25px; padding: 20px; border: 2px solid #f0f0f0; border-radius: 12px; background: #fafafa;">
+                                <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 12px 0;">👕 Foto de la prenda</h3>
+                                <div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #bee5eb; font-size: 14px;">
+                                    <strong>✅ Automático:</strong> Se extraerá de esta página web
+                                </div>
+                                <div id="clothing-preview" style="margin-top: 15px; text-align: center;"></div>
+                            </div>
+
+                            <button id="process-button" onclick="processImages()" disabled style="
+                                width: 100%;
+                                padding: 16px;
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                border: none;
+                                border-radius: 8px;
+                                color: white;
+                                font-size: 16px;
+                                font-weight: 600;
+                                cursor: pointer;
+                                margin-top: 20px;
+                            ">
+                                🎨 Generar Prueba Virtual
+                            </button>
+
+                            <div id="loading" style="display: none; text-align: center; padding: 20px;">
+                                <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
+                                <p>Procesando con IA... Esto puede tomar unos minutos</p>
+                            </div>
+
+                            <div id="result" style="display: none; text-align: center; padding: 20px;">
+                                <h3>🎉 ¡Resultado generado!</h3>
+                                <img id="result-image" src="" alt="Resultado" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); margin-bottom: 15px;">
+                                <a href="#" id="download-link" style="display: inline-block; padding: 12px 24px; background: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 600;">📥 Descargar</a>
+                            </div>
+
+                            <div id="error" style="display: none; background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #f5c6cb;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Variables globales
+            let userPhotoFile = null;
+            let clothingImages = [];
+
             window.openXsmlxModal = function(widgetId) {
-                alert('XSMLX Widget funcionando! Modal completo en desarrollo.');
+                document.getElementById('xsmlx-modal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                extractClothingImages();
             };
+
+            window.closeXsmlxModal = function() {
+                document.getElementById('xsmlx-modal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            };
+
+            window.handleUserPhoto = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    userPhotoFile = file;
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('user-preview');
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Tu foto" style="max-width: 100%; max-height: 200px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">`;
+                    };
+                    reader.readAsDataURL(file);
+                    
+                    updateProcessButton();
+                }
+            };
+
+            function extractClothingImages() {
+                const clothingPreview = document.getElementById('clothing-preview');
+                clothingImages = [];
+                
+                clothingPreview.innerHTML = '<div style="text-align: center; padding: 20px;"><div style="width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div><p>Buscando imágenes de productos...</p></div>';
+                
+                setTimeout(() => {
+                    const images = document.querySelectorAll('img');
+                    const productImages = [];
+                    
+                    console.log(`🔍 Analizando ${images.length} imágenes en la página`);
+                    
+                    images.forEach((img, index) => {
+                        const src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy');
+                        if (src && isProductImage(src, img)) {
+                            const freshSrc = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
+                            
+                            productImages.push({
+                                src: freshSrc,
+                                originalSrc: src,
+                                alt: img.alt || 'Producto',
+                                element: img
+                            });
+                            
+                            console.log(`✅ Imagen ${index + 1} detectada: ${src}`);
+                        }
+                    });
+                
+                    if (productImages.length > 0) {
+                        clothingImages = productImages.slice(0, 10);
+                        
+                        let previewHTML = `<h4>Imágenes encontradas (${clothingImages.length}):</h4>`;
+                        clothingImages.forEach((img, index) => {
+                            previewHTML += `
+                                <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                                    <img src="${img.src}" alt="${img.alt}" style="max-width: 100px; max-height: 100px; margin-right: 10px; vertical-align: top;">
+                                    <span>Imagen ${index + 1}</span>
+                                </div>
+                            `;
+                        });
+                        clothingPreview.innerHTML = previewHTML;
+                        
+                        console.log(`✅ ${clothingImages.length} imágenes de productos encontradas`);
+                        updateProcessButton();
+                    } else {
+                        clothingPreview.innerHTML = '<p style="color: #666;">No se encontraron imágenes de productos en esta página</p>';
+                        console.log('❌ No se encontraron imágenes de productos');
+                    }
+                }, 500);
+            }
+
+            function isProductImage(src, imgElement) {
+                const srcLower = src.toLowerCase();
+                const altLower = (imgElement.alt || '').toLowerCase();
+                const classLower = (imgElement.className || '').toLowerCase();
+                const idLower = (imgElement.id || '').toLowerCase();
+                
+                const skipPatterns = [
+                    'logo', 'icon', 'banner', 'header', 'footer', 'social',
+                    'facebook', 'twitter', 'instagram', 'pinterest', 'youtube',
+                    'advertisement', 'ad-', 'sponsor', 'promo', 'favicon',
+                    'loading', 'placeholder', 'spinner', 'arrow', 'button',
+                    'menu', 'nav', 'sidebar', 'widget', 'tooltip', 'modal',
+                    'close', 'back', 'next', 'prev', 'search', 'cart',
+                    'user', 'profile', 'avatar', 'notification', 'badge'
+                ];
+                
+                for (const pattern of skipPatterns) {
+                    if (srcLower.includes(pattern) || altLower.includes(pattern) || 
+                        classLower.includes(pattern) || idLower.includes(pattern)) {
+                        return false;
+                    }
+                }
+                
+                const productPatterns = [
+                    'product', 'item', 'clothing', 'dress', 'shirt', 'pants',
+                    'jacket', 'sweater', 'shoes', 'bag', 'accessory', 'model',
+                    'main', 'gallery', 'hero', 'featured', 'thumbnail', 'image',
+                    'photo', 'picture', 'preview', 'zoom', 'large', 'medium'
+                ];
+                
+                for (const pattern of productPatterns) {
+                    if (srcLower.includes(pattern) || altLower.includes(pattern) || 
+                        classLower.includes(pattern) || idLower.includes(pattern)) {
+                        return true;
+                    }
+                }
+                
+                const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+                const hasValidExtension = imageExtensions.some(ext => srcLower.includes(ext));
+                
+                const isLargeEnough = imgElement.naturalWidth > 100 && imgElement.naturalHeight > 100;
+                
+                if (hasValidExtension && isLargeEnough) {
+                    return true;
+                }
+                
+                return false;
+            }
+
+            function updateProcessButton() {
+                const processButton = document.getElementById('process-button');
+                const hasUserPhoto = userPhotoFile !== null;
+                const hasClothingImages = clothingImages.length > 0;
+                
+                processButton.disabled = !(hasUserPhoto && hasClothingImages);
+            }
+
+            window.processImages = async function() {
+                const hasUserPhoto = userPhotoFile !== null;
+                
+                if (!hasUserPhoto || clothingImages.length === 0) {
+                    showError('Por favor, sube tu foto y asegúrate de que se detectaron imágenes de productos');
+                    return;
+                }
+
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('result').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+                document.getElementById('process-button').disabled = true;
+
+                try {
+                    const formData = new FormData();
+                    
+                    formData.append('user_photo', userPhotoFile);
+                    formData.append('photo_source', 'upload');
+                    formData.append('page_url', window.location.href);
+                    
+                    clothingImages.forEach((img, index) => {
+                        formData.append(`clothing_url_${index}`, img.src);
+                    });
+
+                    const response = await fetch(XSMLX_CONFIG.backendUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error del servidor: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showResult(result.image_url);
+                    } else {
+                        throw new Error(result.error || 'Error desconocido');
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError(`Error al procesar: ${error.message}`);
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('process-button').disabled = false;
+                }
+            };
+
+            function showResult(imageUrl) {
+                const resultDiv = document.getElementById('result');
+                const resultImage = document.getElementById('result-image');
+                const downloadLink = document.getElementById('download-link');
+                
+                const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : 
+                    XSMLX_CONFIG.backendUrl.replace('/api/process', '') + imageUrl;
+                
+                resultImage.src = fullImageUrl;
+                downloadLink.href = fullImageUrl;
+                downloadLink.download = `virtual_try_on_${Date.now()}.png`;
+                
+                resultDiv.style.display = 'block';
+            }
+
+            function showError(message) {
+                const errorDiv = document.getElementById('error');
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
 
             function initWidget() {
                 const widgetContainer = document.createElement('div');
                 widgetContainer.innerHTML = createXsmlxWidget();
                 document.body.appendChild(widgetContainer);
+                
+                const modalContainer = document.createElement('div');
+                modalContainer.innerHTML = createXsmlxModal();
+                document.body.appendChild(modalContainer);
+                
+                document.getElementById('xsmlx-modal').addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeXsmlxModal();
+                    }
+                });
+                
                 console.log('XSMLX Widget cargado y visible');
             }
 
@@ -1221,6 +1548,16 @@
             } else {
                 initWidget();
             }
+
+            // CSS para animación
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
         })();
     </script>
 </body>
