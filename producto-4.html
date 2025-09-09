@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ropa Formal - Tienda de Ropa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #667eea;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .product-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .product-images img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .product-images img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .product-info {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .product-price {
+            font-size: 28px;
+            font-weight: 600;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        
+        .product-description {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        .product-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .product-features li {
+            padding: 8px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .product-features li::before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .size-selector {
+            margin-bottom: 25px;
+        }
+        
+        .size-selector h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .sizes {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .size-btn {
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .size-btn:hover,
+        .size-btn.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: #5a6fd8;
+        }
+        
+        .back-link::before {
+            content: "← ";
+        }
+        
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .product-images {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">👕 Tienda de Ropa</div>
+                <div class="nav-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="#productos">Productos</a>
+                    <a href="#contacto">Contacto</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-link">Volver a la tienda</a>
+        
+        <div class="product-grid">
+            <div class="product-images">
+                <img src="ROPA/4/GWF00922.F007393-55667.avif" alt="Ropa formal - Vista principal" onclick="openModal(this.src)">
+                <img src="ROPA/4/GWF00922.F007393-55667-2.avif" alt="Ropa formal - Vista 2" onclick="openModal(this.src)">
+                <img src="ROPA/4/GWF00922.F007393-55667-3.avif" alt="Ropa formal - Vista 3" onclick="openModal(this.src)">
+                <img src="ROPA/4/GWF00922.F007393-55667-4.avif" alt="Ropa formal - Vista 4" onclick="openModal(this.src)">
+                <img src="ROPA/4/GWF00922.F007393-55667-5.avif" alt="Ropa formal - Vista 5" onclick="openModal(this.src)">
+            </div>
+            
+            <div class="product-info">
+                <h1 class="product-title">Colección Formal Elegante</h1>
+                <div class="product-price">€89.99</div>
+                
+                <p class="product-description">
+                    Ropa formal de alta gama para ocasiones especiales. 
+                    Diseño elegante y sofisticado que transmite profesionalismo y estilo. 
+                    Perfecta para reuniones de trabajo, eventos formales y ocasiones especiales.
+                </p>
+                
+                <ul class="product-features">
+                    <li>Material premium de alta calidad</li>
+                    <li>Corte impecable y elegante</li>
+                    <li>Acabados de lujo</li>
+                    <li>Colores clásicos y sofisticados</li>
+                    <li>Perfecto para eventos formales</li>
+                </ul>
+                
+                <div class="size-selector">
+                    <h3>Talla:</h3>
+                    <div class="sizes">
+                        <button class="size-btn" onclick="selectSize(this)">S</button>
+                        <button class="size-btn" onclick="selectSize(this)">M</button>
+                        <button class="size-btn selected" onclick="selectSize(this)">L</button>
+                        <button class="size-btn" onclick="selectSize(this)">XL</button>
+                    </div>
+                </div>
+                
+                <button class="add-to-cart" onclick="addToCart()">🛒 Añadir al Carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver imágenes en grande -->
+    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; cursor: pointer;" onclick="closeModal()">
+        <img id="modalImage" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90%; max-height: 90%; border-radius: 8px;">
+    </div>
+
+    <script>
+        function selectSize(button) {
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+        }
+        
+        function addToCart() {
+            const selectedSize = document.querySelector('.size-btn.selected').textContent;
+            alert(`¡Ropa formal añadida al carrito! Talla: ${selectedSize}`);
+        }
+        
+        function openModal(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('imageModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
