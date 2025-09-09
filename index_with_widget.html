@@ -1,3 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleHub - Moda Premium</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .product-page {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 50px;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .main-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .thumbnail-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .thumbnail:hover {
+            opacity: 1;
+            border-color: #667eea;
+        }
+
+        .thumbnail.active {
+            opacity: 1;
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .product-info {
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .product-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .product-price {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 25px;
+        }
+
+        .product-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .product-description h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .product-description ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .product-description li {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .sizes-section {
+            margin-bottom: 25px;
+        }
+
+        .sizes-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .sizes {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .size-option {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            background: white;
+            font-size: 1.1em;
+        }
+
+        .size-option:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .size-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .quantity-section {
+            margin-bottom: 30px;
+        }
+
+        .quantity-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .quantity {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .add-to-cart-btn, .buy-now-btn {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .buy-now-btn {
+            background: linear-gradient(135deg, #2ed573 0%, #17a2b8 100%);
+            color: white;
+        }
+
+        .buy-now-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(46, 213, 115, 0.4);
+        }
+
+        .product-features {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .feature-icon {
+            font-size: 1.2em;
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff4757;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .badge.new {
+            background: #2ed573;
+        }
+
+        .badge.sale {
+            background: #ff4757;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav {
+                gap: 20px;
+            }
+            
+            .product-page {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 20px;
+            }
+            
+            .main-image {
+                height: 400px;
+            }
+            
+            .thumbnail-gallery {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            
+            .thumbnail {
+                height: 60px;
+            }
+            
+            .product-title {
+                font-size: 2em;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+
+        .loading {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">StyleHub</div>
+            <nav class="nav">
+                <a href="#home">Inicio</a>
+                <a href="#products">Productos</a>
+                <a href="#about">Nosotros</a>
+                <a href="#contact">Contacto</a>
+            </nav>
+            <div class="cart-icon">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="product-page">
+            <!-- Product Images Gallery -->
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="133826_1.webp" alt="Producto" id="mainImage" loading="lazy">
+                </div>
+                <div class="thumbnail-gallery">
+                    <img src="133826_1.webp" alt="Vista 1" class="thumbnail active" onclick="changeMainImage('133826_1.webp')" loading="lazy">
+                    <img src="133826_2.webp" alt="Vista 2" class="thumbnail" onclick="changeMainImage('133826_2.webp')" loading="lazy">
+                    <img src="133826_3.webp" alt="Vista 3" class="thumbnail" onclick="changeMainImage('133826_3.webp')" loading="lazy">
+                    <img src="133826_10.jpg" alt="Vista 4" class="thumbnail" onclick="changeMainImage('133826_10.jpg')" loading="lazy">
+                    <img src="133826_10.webp" alt="Vista 5" class="thumbnail" onclick="changeMainImage('133826_10.webp')" loading="lazy">
+                    <img src="133826_11.webp" alt="Vista 6" class="thumbnail" onclick="changeMainImage('133826_11.webp')" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Product Information -->
+            <div class="product-info">
+                <div class="badge new">NUEVO</div>
+                <h1 class="product-title">Camiseta Premium StyleHub</h1>
+                <div class="product-price">€29.99</div>
+                
+                <div class="product-description">
+                    <p>Descubre nuestra camiseta premium, diseñada con los más altos estándares de calidad. Fabricada con algodón 100% orgánico, esta prenda combina comodidad y estilo en perfecta armonía.</p>
+                    
+                    <h3>Características:</h3>
+                    <ul>
+                        <li>✅ Algodón 100% orgánico certificado</li>
+                        <li>✅ Corte moderno y cómodo</li>
+                        <li>✅ Lavado a máquina seguro</li>
+                        <li>✅ Colores que no se destiñen</li>
+                        <li>✅ Tela transpirable y suave</li>
+                    </ul>
+                </div>
+
+                <div class="sizes-section">
+                    <label class="sizes-label">Selecciona tu talla:</label>
+                    <div class="sizes">
+                        <span class="size-option" data-size="S">S</span>
+                        <span class="size-option selected" data-size="M">M</span>
+                        <span class="size-option" data-size="L">L</span>
+                        <span class="size-option" data-size="XL">XL</span>
+                        <span class="size-option" data-size="XXL">XXL</span>
+                    </div>
+                </div>
+
+                <div class="quantity-section">
+                    <label class="quantity-label">Cantidad:</label>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                        <span class="quantity" id="quantity">1</span>
+                        <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+
+                <div class="product-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart()">
+                        🛒 Añadir al Carrito
+                    </button>
+                    <button class="buy-now-btn" onclick="buyNow()">
+                        💳 Comprar Ahora
+                    </button>
+                </div>
+
+                <div class="product-features">
+                    <div class="feature">
+                        <span class="feature-icon">🚚</span>
+                        <span>Envío gratis en pedidos +€50</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">↩️</span>
+                        <span>Devoluciones gratuitas</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🔒</span>
+                        <span>Compra 100% segura</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cartCount = 0;
+        let cartItems = [];
+        let quantity = 1;
+        let selectedSize = 'M';
+
+        // Add staggered loading animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Size selection functionality
+            const sizeOptions = document.querySelectorAll('.size-option');
+            sizeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from siblings
+                    const siblings = this.parentNode.querySelectorAll('.size-option');
+                    siblings.forEach(sibling => sibling.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    selectedSize = this.getAttribute('data-size');
+                });
+            });
+        });
+
+        function changeMainImage(imageSrc) {
+            document.getElementById('mainImage').src = imageSrc;
+            
+            // Update active thumbnail
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function increaseQuantity() {
+            quantity++;
+            document.getElementById('quantity').textContent = quantity;
+        }
+
+        function decreaseQuantity() {
+            if (quantity > 1) {
+                quantity--;
+                document.getElementById('quantity').textContent = quantity;
+            }
+        }
+
+        function addToCart() {
+            const productName = 'Camiseta Premium StyleHub';
+            const price = 29.99;
+            
+            for (let i = 0; i < quantity; i++) {
+                cartCount++;
+                cartItems.push({ 
+                    name: `${productName} (Talla: ${selectedSize})`, 
+                    price: price 
+                });
+            }
+            
+            // Update cart count display
+            document.getElementById('cartCount').textContent = cartCount;
+            
+            // Show success message
+            showNotification(`${quantity}x ${productName} (${selectedSize}) añadido al carrito`);
+        }
+
+        function buyNow() {
+            addToCart();
+            showNotification('Redirigiendo al checkout...');
+            // Aquí normalmente redirigirías a la página de checkout
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #2ed573;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-weight: 500;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Cart icon click functionality
+        document.querySelector('.cart-icon').addEventListener('click', function() {
+            if (cartItems.length === 0) {
+                showNotification('Tu carrito está vacío');
+                return;
+            }
+            
+            let cartSummary = 'Carrito de compras:\n\n';
+            let total = 0;
+            
+            cartItems.forEach((item, index) => {
+                cartSummary += `${index + 1}. ${item.name} - €${item.price}\n`;
+                total += item.price;
+            });
+            
+            cartSummary += `\nTotal: €${total.toFixed(2)}`;
+            
+            alert(cartSummary);
+        });
+    </script>
+
 <!-- 
 XSMLX Virtual Try-On Widget CON AUTENTICACIÓN DE INSTAGRAM - CONFIGURADO
 =======================================================================
@@ -29,7 +668,7 @@ PASOS PARA CONFIGURAR INSTAGRAM:
         // CONFIGURACIÓN - CAMBIA ESTE VALOR POR TU CLIENT ID REAL
         const XSMLX_CONFIG = {
             backendUrl: 'https://xsmlx.onrender.com',
-            instagramClientId: '4261684534156253', // ✅ Client ID configurado
+            instagramClientId: '4261684534156253', // ✅ Meta App ID configurado
             widgetId: 'xsmlx-widget-' + Math.random().toString(36).substr(2, 9)
         };
     
@@ -347,12 +986,16 @@ PASOS PARA CONFIGURAR INSTAGRAM:
     
         // Login con Instagram
         window.loginWithInstagram = function() {
-            // Client ID ya está configurado ✅
+            // Verificar que el Client ID esté configurado
+            if (XSMLX_CONFIG.instagramClientId === 'TU_INSTAGRAM_CLIENT_ID_AQUI') {
+                alert('❌ Error: Debes configurar tu Instagram Client ID en el código del snippet.\n\nVe a la línea 25 y cambia "TU_INSTAGRAM_CLIENT_ID_AQUI" por tu Client ID real de Instagram.');
+                return;
+            }
             
             const redirectUri = encodeURIComponent(`${XSMLX_CONFIG.backendUrl}/api/instagram/callback`);
-            const scope = 'instagram_basic,instagram_manage_comments,instagram_manage_messages,pages_show_list';
+            const scope = 'user_profile,user_media';
             
-            const authUrl = `https://www.facebook.com/v19.0/dialog/oauth?client_id=${XSMLX_CONFIG.instagramClientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+            const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${XSMLX_CONFIG.instagramClientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
             
             // Abrir ventana de autenticación
             const authWindow = window.open(authUrl, 'instagram-auth', 'width=500,height=600,scrollbars=yes,resizable=yes');
@@ -714,19 +1357,27 @@ PASOS PARA CONFIGURAR INSTAGRAM:
         document.head.appendChild(style);
     
         // Inicializar widget
-        function initializeWidget() {
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!document.getElementById(XSMLX_CONFIG.widgetId)) {
+                document.body.insertAdjacentHTML('beforeend', createXsmlxWidget());
+            }
+        });
+    
+        // Si el DOM ya está cargado, inicializar inmediatamente
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                if (!document.getElementById(XSMLX_CONFIG.widgetId)) {
+                    document.body.insertAdjacentHTML('beforeend', createXsmlxWidget());
+                }
+            });
+        } else {
             if (!document.getElementById(XSMLX_CONFIG.widgetId)) {
                 document.body.insertAdjacentHTML('beforeend', createXsmlxWidget());
             }
         }
-        
-        // Inicializar cuando el DOM esté listo
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeWidget);
-        } else {
-            initializeWidget();
-        }
     
     })();
     </script>
-    
+
+</body>
+</html>
