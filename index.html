@@ -1162,6 +1162,66 @@
     </script>
 
     <!-- XSMLX Virtual Try-On Widget -->
-    <script src="snippet_updated.js"></script>
+    <script>
+        // XSMLX Widget - Código integrado para asegurar que funcione
+        (function() {
+            'use strict';
+            
+            const XSMLX_CONFIG = {
+                backendUrl: 'https://xsmlx.onrender.com/api/process',
+                widgetId: 'xsmlx-widget-' + Math.random().toString(36).substr(2, 9)
+            };
+
+            function createXsmlxWidget() {
+                return `
+                    <div id="${XSMLX_CONFIG.widgetId}" style="
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        z-index: 9999;
+                        font-family: Arial, sans-serif;
+                    ">
+                        <button onclick="openXsmlxModal('${XSMLX_CONFIG.widgetId}')" style="
+                            width: 80px;
+                            height: 40px;
+                            background: white;
+                            border: 2px solid #000;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: bold;
+                            font-size: 14px;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                        ">
+                            <span style="color: #000;">X</span>
+                            <span style="color: #ff0000;">S</span>
+                            <span style="color: #00ff00;">M</span>
+                            <span style="color: #000;">L</span>
+                            <span style="color: #ffff00;">X</span>
+                        </button>
+                    </div>
+                `;
+            }
+
+            window.openXsmlxModal = function(widgetId) {
+                alert('XSMLX Widget funcionando! Modal completo en desarrollo.');
+            };
+
+            function initWidget() {
+                const widgetContainer = document.createElement('div');
+                widgetContainer.innerHTML = createXsmlxWidget();
+                document.body.appendChild(widgetContainer);
+                console.log('XSMLX Widget cargado y visible');
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initWidget);
+            } else {
+                initWidget();
+            }
+        })();
+    </script>
 </body>
 </html>
