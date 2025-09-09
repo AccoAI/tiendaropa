@@ -1359,7 +1359,32 @@
             window.openXsmlxModal = function(widgetId) {
                 document.getElementById('xsmlx-modal').style.display = 'block';
                 document.body.style.overflow = 'hidden';
+                
+                // Limpiar estado anterior
+                userPhotoFile = null;
+                selectedInstagramPhoto = null;
+                clothingImages = [];
+                
+                // Resetear formulario
+                const userPhotoInput = document.getElementById('user-photo');
+                if (userPhotoInput) userPhotoInput.value = '';
+                
+                const userPreview = document.getElementById('user-preview');
+                if (userPreview) userPreview.innerHTML = '';
+                
+                // Resetear radio buttons
+                const uploadRadio = document.querySelector('input[name="photo-source"][value="upload"]');
+                if (uploadRadio) uploadRadio.checked = true;
+                
+                const uploadSection = document.getElementById('upload-section');
+                const instagramSection = document.getElementById('instagram-section');
+                if (uploadSection) uploadSection.style.display = 'block';
+                if (instagramSection) instagramSection.style.display = 'none';
+                
+                // Extraer imágenes de productos de la página actual
                 extractClothingImages();
+                
+                console.log('🔄 Modal abierto - detectando imágenes de productos en:', window.location.href);
             };
 
             window.closeXsmlxModal = function() {
@@ -1503,53 +1528,72 @@
 
             function extractClothingImages() {
                 const clothingPreview = document.getElementById('clothing-preview');
+                
+                // Limpiar imágenes anteriores
                 clothingImages = [];
                 
                 clothingPreview.innerHTML = '<div style="text-align: center; padding: 20px;"><div style="width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div><p>Buscando imágenes de productos...</p></div>';
                 
+                // Esperar un poco más para que las imágenes se carguen completamente
                 setTimeout(() => {
                     const images = document.querySelectorAll('img');
                     const productImages = [];
                     
-                    console.log(`🔍 Analizando ${images.length} imágenes en la página`);
+                    console.log(`🔍 Analizando ${images.length} imágenes en la página actual: ${window.location.href}`);
+                    console.log(`🔍 URL actual: ${window.location.pathname}`);
                     
                     images.forEach((img, index) => {
                         const src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy');
                         if (src && isProductImage(src, img)) {
+                            // Forzar recarga de imagen para evitar cache
                             const freshSrc = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
                             
                             productImages.push({
                                 src: freshSrc,
                                 originalSrc: src,
                                 alt: img.alt || 'Producto',
-                                element: img
+                                element: img,
+                                width: img.naturalWidth || img.width,
+                                height: img.naturalHeight || img.height
                             });
                             
-                            console.log(`✅ Imagen ${index + 1} detectada: ${src}`);
+                            console.log(`✅ Imagen ${index + 1} detectada: ${src} (${img.naturalWidth}x${img.naturalHeight})`);
                         }
                     });
                 
                     if (productImages.length > 0) {
-                        clothingImages = productImages.slice(0, 10);
+                        clothingImages = productImages.slice(0, 15); // Aumentar a 15 imágenes
                         
                         let previewHTML = `<h4>Imágenes encontradas (${clothingImages.length}):</h4>`;
                         clothingImages.forEach((img, index) => {
                             previewHTML += `
-                                <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                                    <img src="${img.src}" alt="${img.alt}" style="max-width: 100px; max-height: 100px; margin-right: 10px; vertical-align: top;">
-                                    <span>Imagen ${index + 1}</span>
+                                <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: white;">
+                                    <img src="${img.src}" alt="${img.alt}" style="max-width: 100px; max-height: 100px; margin-right: 10px; vertical-align: top; border-radius: 4px;">
+                                    <div style="display: inline-block; vertical-align: top;">
+                                        <div style="font-weight: bold; margin-bottom: 5px;">Imagen ${index + 1}</div>
+                                        <div style="font-size: 12px; color: #666;">${img.width}x${img.height}px</div>
+                                        <div style="font-size: 11px; color: #999; margin-top: 2px;">${img.alt}</div>
+                                    </div>
                                 </div>
                             `;
                         });
                         clothingPreview.innerHTML = previewHTML;
                         
-                        console.log(`✅ ${clothingImages.length} imágenes de productos encontradas`);
+                        console.log(`✅ ${clothingImages.length} imágenes de productos encontradas y listas para procesar`);
                         updateProcessButton();
                     } else {
-                        clothingPreview.innerHTML = '<p style="color: #666;">No se encontraron imágenes de productos en esta página</p>';
+                        clothingPreview.innerHTML = `
+                            <div style="text-align: center; padding: 20px; color: #666;">
+                                <p>❌ No se encontraron imágenes de productos en esta página</p>
+                                <p style="font-size: 12px; margin-top: 10px;">Asegúrate de que las imágenes de productos estén cargadas</p>
+                                <button onclick="extractClothingImages()" style="margin-top: 10px; padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                    🔄 Reintentar
+                                </button>
+                            </div>
+                        `;
                         console.log('❌ No se encontraron imágenes de productos');
                     }
-                }, 500);
+                }, 1000); // Aumentar tiempo de espera a 1 segundo
             }
 
             function isProductImage(src, imgElement) {
@@ -1558,6 +1602,7 @@
                 const classLower = (imgElement.className || '').toLowerCase();
                 const idLower = (imgElement.id || '').toLowerCase();
                 
+                // Patrones a excluir (más estrictos)
                 const skipPatterns = [
                     'logo', 'icon', 'banner', 'header', 'footer', 'social',
                     'facebook', 'twitter', 'instagram', 'pinterest', 'youtube',
@@ -1565,9 +1610,11 @@
                     'loading', 'placeholder', 'spinner', 'arrow', 'button',
                     'menu', 'nav', 'sidebar', 'widget', 'tooltip', 'modal',
                     'close', 'back', 'next', 'prev', 'search', 'cart',
-                    'user', 'profile', 'avatar', 'notification', 'badge'
+                    'user', 'profile', 'avatar', 'notification', 'badge',
+                    'xsmlx', 'widget' // Excluir el propio widget
                 ];
                 
+                // Verificar patrones de exclusión
                 for (const pattern of skipPatterns) {
                     if (srcLower.includes(pattern) || altLower.includes(pattern) || 
                         classLower.includes(pattern) || idLower.includes(pattern)) {
@@ -1575,13 +1622,18 @@
                     }
                 }
                 
+                // Patrones de productos (más específicos y amplios)
                 const productPatterns = [
                     'product', 'item', 'clothing', 'dress', 'shirt', 'pants',
                     'jacket', 'sweater', 'shoes', 'bag', 'accessory', 'model',
                     'main', 'gallery', 'hero', 'featured', 'thumbnail', 'image',
-                    'photo', 'picture', 'preview', 'zoom', 'large', 'medium'
+                    'photo', 'picture', 'preview', 'zoom', 'large', 'medium',
+                    'ropa', 'camiseta', 'hoodie', 'casual', 'formal', 'deportiva',
+                    'temporada', 'stylehub', '133826', 'i2651710899009', 'shi26517108990',
+                    'gwf00922', '252br0413', '252bbaj7z', 'hot_hoodie', 'nudeproject'
                 ];
                 
+                // Verificar patrones de productos
                 for (const pattern of productPatterns) {
                     if (srcLower.includes(pattern) || altLower.includes(pattern) || 
                         classLower.includes(pattern) || idLower.includes(pattern)) {
@@ -1589,13 +1641,25 @@
                     }
                 }
                 
-                const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+                // Verificar extensiones de imagen válidas
+                const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif'];
                 const hasValidExtension = imageExtensions.some(ext => srcLower.includes(ext));
                 
-                const isLargeEnough = imgElement.naturalWidth > 100 && imgElement.naturalHeight > 100;
+                // Verificar que la imagen tenga un tamaño mínimo (más permisivo)
+                const isLargeEnough = (imgElement.naturalWidth > 50 && imgElement.naturalHeight > 50) || 
+                                    (imgElement.width > 50 && imgElement.height > 50);
                 
-                if (hasValidExtension && isLargeEnough) {
-                    return true;
+                // Verificar que no sea una imagen muy pequeña (probablemente icono)
+                const isNotTooSmall = (imgElement.naturalWidth > 30 && imgElement.naturalHeight > 30) || 
+                                     (imgElement.width > 30 && imgElement.height > 30);
+                
+                // Si tiene extensión válida, es lo suficientemente grande y no es muy pequeña
+                if (hasValidExtension && isLargeEnough && isNotTooSmall) {
+                    // Verificar que no esté en el header o footer
+                    const parentElement = imgElement.closest('header, footer, nav, .header, .footer, .nav');
+                    if (!parentElement) {
+                        return true;
+                    }
                 }
                 
                 return false;
@@ -1702,6 +1766,22 @@
                         closeXsmlxModal();
                     }
                 });
+                
+                // Detectar cambios en la URL (cuando cambias de tab)
+                let currentUrl = window.location.href;
+                setInterval(() => {
+                    if (window.location.href !== currentUrl) {
+                        currentUrl = window.location.href;
+                        console.log('🔄 URL cambió a:', currentUrl);
+                        
+                        // Si el modal está abierto, re-detectar imágenes
+                        const modal = document.getElementById('xsmlx-modal');
+                        if (modal && modal.style.display === 'block') {
+                            console.log('🔄 Re-detectando imágenes por cambio de URL');
+                            extractClothingImages();
+                        }
+                    }
+                }, 500); // Verificar cada 500ms
                 
                 console.log('XSMLX Widget cargado y visible');
             }
