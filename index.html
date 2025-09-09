@@ -1162,103 +1162,111 @@
     </script>
 
     <!-- XSMLX Virtual Try-On Widget -->
-    <script>
+<script>
         // XSMLX Widget - Código integrado para asegurar que funcione
-        (function() {
-            'use strict';
-            
-            const XSMLX_CONFIG = {
+    (function() {
+        'use strict';
+        
+        const XSMLX_CONFIG = {
                 backendUrl: 'https://xsmlx.onrender.com/api/process',
-                widgetId: 'xsmlx-widget-' + Math.random().toString(36).substr(2, 9)
+                widgetId: 'xsmlx-widget-' + Math.random().toString(36).substr(2, 9),
+                // Configuración para cargar snippet dinámicamente
+                snippetSource: {
+                    enabled: true, // Cambiar a false para usar solo código local
+                    githubRepo: 'AccoAI/XSMLX',
+                    branch: 'main',
+                    filePath: 'snippet_para_copiar.html', // Archivo del snippet en tu repo
+                    fallbackToLocal: true // Si falla, usar código local
+                }
             };
 
-            function createXsmlxWidget() {
-                return `
-                    <div id="${XSMLX_CONFIG.widgetId}" style="
+        function createXsmlxWidget() {
+            return `
+                <div id="${XSMLX_CONFIG.widgetId}" style="
                         position: fixed;
                         bottom: 20px;
                         right: 20px;
                         z-index: 9999;
                         font-family: Arial, sans-serif;
+                ">
+                    <button onclick="openXsmlxModal('${XSMLX_CONFIG.widgetId}')" style="
+                        width: 80px;
+                        height: 40px;
+                        background: white;
+                        border: 2px solid #000;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                            font-weight: bold;
+                        font-size: 14px;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                        ">
+                        <span style="color: #000;">X</span>
+                        <span style="color: #ff0000;">S</span>
+                        <span style="color: #00ff00;">M</span>
+                        <span style="color: #000;">L</span>
+                        <span style="color: #ffff00;">X</span>
+                    </button>
+                </div>
+            `;
+        }
+    
+        function createXsmlxModal() {
+            return `
+                <div id="xsmlx-modal" style="
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    z-index: 10000;
+                    backdrop-filter: blur(5px);
+                ">
+                    <div style="
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: white;
+                        border-radius: 16px;
+                        padding: 30px;
+                            max-width: 500px;
+                        width: 90%;
+                        max-height: 80vh;
+                        overflow-y: auto;
+                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
                     ">
-                        <button onclick="openXsmlxModal('${XSMLX_CONFIG.widgetId}')" style="
-                            width: 80px;
-                            height: 40px;
-                            background: white;
-                            border: 2px solid #000;
-                            border-radius: 8px;
+                        <button onclick="closeXsmlxModal()" style="
+                            position: absolute;
+                            top: 15px;
+                            right: 20px;
+                            background: none;
+                            border: none;
+                            font-size: 24px;
                             cursor: pointer;
+                            color: #999;
+                            padding: 5px;
+                            border-radius: 50%;
+                                width: 35px;
+                                height: 35px;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-weight: bold;
-                            font-size: 14px;
-                            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                        ">
-                            <span style="color: #000;">X</span>
-                            <span style="color: #ff0000;">S</span>
-                            <span style="color: #00ff00;">M</span>
-                            <span style="color: #000;">L</span>
-                            <span style="color: #ffff00;">X</span>
-                        </button>
-                    </div>
-                `;
-            }
-
-            function createXsmlxModal() {
-                return `
-                    <div id="xsmlx-modal" style="
-                        display: none;
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: rgba(0, 0, 0, 0.8);
-                        z-index: 10000;
-                        backdrop-filter: blur(5px);
-                    ">
-                        <div style="
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            background: white;
-                            border-radius: 16px;
-                            padding: 30px;
-                            max-width: 500px;
-                            width: 90%;
-                            max-height: 80vh;
-                            overflow-y: auto;
-                            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-                        ">
-                            <button onclick="closeXsmlxModal()" style="
-                                position: absolute;
-                                top: 15px;
-                                right: 20px;
-                                background: none;
-                                border: none;
-                                font-size: 24px;
-                                cursor: pointer;
-                                color: #999;
-                                padding: 5px;
-                                border-radius: 50%;
-                                width: 35px;
-                                height: 35px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
                             ">&times;</button>
                             
                             <div style="text-align: center; margin-bottom: 30px;">
                                 <h2 style="font-size: 28px; font-weight: 700; color: #333; margin: 0 0 8px 0;">👕 Prueba Virtual</h2>
                                 <p style="font-size: 16px; color: #666; margin: 0;">Sube tu foto y pruébate esta prenda</p>
-                            </div>
-
+                        </div>
+    
                             <div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #bee5eb; font-size: 14px;">
                                 <strong>✅ Automático:</strong> La foto de la prenda se extraerá de esta página web.
                             </div>
-
+    
                             <div style="margin-bottom: 25px; padding: 20px; border: 2px solid #f0f0f0; border-radius: 12px; background: #fafafa;">
                                 <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
                                     <span style="background: #667eea; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">1</span>
@@ -1306,7 +1314,7 @@
                                 
                                 <div id="user-preview" style="margin-top: 15px; text-align: center;"></div>
                             </div>
-
+    
                             <div style="margin-bottom: 25px; padding: 20px; border: 2px solid #f0f0f0; border-radius: 12px; background: #fafafa;">
                                 <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
                                     <span style="background: #667eea; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">2</span>
@@ -1317,47 +1325,47 @@
                                 </div>
                                 <div id="clothing-preview" style="margin-top: 15px; text-align: center;"></div>
                             </div>
-
-                            <button id="process-button" onclick="processImages()" disabled style="
+    
+                                <button id="process-button" onclick="processImages()" disabled style="
                                 width: 100%;
                                 padding: 16px;
                                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                                border: none;
-                                border-radius: 8px;
+                                    border: none;
+                                    border-radius: 8px;
                                 color: white;
-                                font-size: 16px;
-                                font-weight: 600;
+                                    font-size: 16px;
+                                    font-weight: 600;
                                 cursor: pointer;
                                 margin-top: 20px;
                             ">
                                 🎨 Generar Prueba Virtual
-                            </button>
+                                </button>
 
                             <div id="loading" style="display: none; text-align: center; padding: 20px;">
                                 <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
                                 <p>Procesando con IA... Esto puede tomar unos minutos</p>
                             </div>
-
+    
                             <div id="result" style="display: none; text-align: center; padding: 20px;">
                                 <h3>🎉 ¡Resultado generado!</h3>
                                 <img id="result-image" src="" alt="Resultado" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); margin-bottom: 15px;">
                                 <a href="#" id="download-link" style="display: inline-block; padding: 12px 24px; background: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 600;">📥 Descargar</a>
-                            </div>
-
-                            <div id="error" style="display: none; background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #f5c6cb;"></div>
                         </div>
+    
+                            <div id="error" style="display: none; background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #f5c6cb;"></div>
                     </div>
-                `;
-            }
-
-            // Variables globales
-            let userPhotoFile = null;
-            let clothingImages = [];
+                </div>
+            `;
+        }
+    
+        // Variables globales
+        let userPhotoFile = null;
+        let clothingImages = [];
             let instagramPhotos = [];
-            let selectedInstagramPhoto = null;
-
-            window.openXsmlxModal = function(widgetId) {
-                document.getElementById('xsmlx-modal').style.display = 'block';
+        let selectedInstagramPhoto = null;
+    
+        window.openXsmlxModal = function(widgetId) {
+            document.getElementById('xsmlx-modal').style.display = 'block';
                 document.body.style.overflow = 'hidden';
                 
                 // Limpiar estado anterior
@@ -1391,34 +1399,34 @@
                 document.getElementById('xsmlx-modal').style.display = 'none';
                 document.body.style.overflow = 'auto';
             };
-
-            // Cambiar fuente de foto
-            window.togglePhotoSource = function(source) {
-                const uploadSection = document.getElementById('upload-section');
-                const instagramSection = document.getElementById('instagram-section');
-                
-                if (source === 'upload') {
-                    uploadSection.style.display = 'block';
-                    instagramSection.style.display = 'none';
-                    selectedInstagramPhoto = null;
-                    userPhotoFile = null;
-                } else if (source === 'instagram') {
-                    uploadSection.style.display = 'none';
-                    instagramSection.style.display = 'block';
-                    userPhotoFile = null;
-                    document.getElementById('user-photo').value = '';
+    
+        // Cambiar fuente de foto
+        window.togglePhotoSource = function(source) {
+            const uploadSection = document.getElementById('upload-section');
+            const instagramSection = document.getElementById('instagram-section');
+            
+            if (source === 'upload') {
+                uploadSection.style.display = 'block';
+                instagramSection.style.display = 'none';
+                selectedInstagramPhoto = null;
+                userPhotoFile = null;
+            } else if (source === 'instagram') {
+                uploadSection.style.display = 'none';
+                instagramSection.style.display = 'block';
+                userPhotoFile = null;
+                document.getElementById('user-photo').value = '';
                     loadInstagramPhotos();
                 }
                 
                 document.getElementById('user-preview').innerHTML = '';
-                updateProcessButton();
-            };
-
+            updateProcessButton();
+        };
+    
             window.handleUserPhoto = function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    userPhotoFile = file;
-                    selectedInstagramPhoto = null;
+            const file = event.target.files[0];
+            if (file) {
+                userPhotoFile = file;
+                selectedInstagramPhoto = null;
                     
                     const reader = new FileReader();
                     reader.onload = function(e) {
@@ -1427,9 +1435,9 @@
                     };
                     reader.readAsDataURL(file);
                     
-                    updateProcessButton();
-                }
-            };
+                updateProcessButton();
+            }
+        };
 
             // Cargar fotos de Instagram
             window.loadInstagramPhotos = async function() {
@@ -1473,36 +1481,36 @@
                     `;
                 }
             };
-
-            // Mostrar fotos de Instagram
-            function displayInstagramPhotos() {
-                const instagramGallery = document.getElementById('instagram-gallery');
-                
+    
+        // Mostrar fotos de Instagram
+        function displayInstagramPhotos() {
+            const instagramGallery = document.getElementById('instagram-gallery');
+            
                 if (instagramPhotos.length === 0) {
-                    instagramGallery.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No se encontraron fotos de Instagram</div>';
-                    return;
-                }
-                
-                let galleryHTML = '';
-                instagramPhotos.forEach((photo, index) => {
-                    galleryHTML += `
-                        <div style="border: 2px solid #ddd; border-radius: 8px; padding: 10px; cursor: pointer; transition: all 0.3s ease;" 
-                             onclick="selectInstagramPhoto(${index})" 
-                             onmouseover="this.style.borderColor='#667eea'" 
-                             onmouseout="this.style.borderColor='#ddd'">
-                            <img src="${photo.thumbnail || photo.url}" alt="Instagram Photo" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px;">
-                            <p style="margin: 8px 0 0 0; font-size: 12px; color: #666; text-align: center;">Foto ${index + 1}</p>
-                        </div>
-                    `;
-                });
-                
-                instagramGallery.innerHTML = galleryHTML;
+                instagramGallery.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No se encontraron fotos de Instagram</div>';
+                return;
             }
-
-            // Seleccionar foto de Instagram
-            window.selectInstagramPhoto = function(index) {
+            
+            let galleryHTML = '';
+                instagramPhotos.forEach((photo, index) => {
+                galleryHTML += `
+                    <div style="border: 2px solid #ddd; border-radius: 8px; padding: 10px; cursor: pointer; transition: all 0.3s ease;" 
+                         onclick="selectInstagramPhoto(${index})" 
+                         onmouseover="this.style.borderColor='#667eea'" 
+                         onmouseout="this.style.borderColor='#ddd'">
+                        <img src="${photo.thumbnail || photo.url}" alt="Instagram Photo" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px;">
+                        <p style="margin: 8px 0 0 0; font-size: 12px; color: #666; text-align: center;">Foto ${index + 1}</p>
+                    </div>
+                `;
+            });
+            
+            instagramGallery.innerHTML = galleryHTML;
+        }
+    
+        // Seleccionar foto de Instagram
+        window.selectInstagramPhoto = function(index) {
                 selectedInstagramPhoto = instagramPhotos[index];
-                userPhotoFile = null;
+            userPhotoFile = null;
                 
                 const preview = document.getElementById('user-preview');
                 preview.innerHTML = `
@@ -1512,13 +1520,13 @@
                     </div>
                 `;
                 
-                const galleryItems = document.querySelectorAll('#instagram-gallery > div');
-                galleryItems.forEach((item, i) => {
-                    if (i === index) {
-                        item.style.borderColor = '#667eea';
+            const galleryItems = document.querySelectorAll('#instagram-gallery > div');
+            galleryItems.forEach((item, i) => {
+                if (i === index) {
+                    item.style.borderColor = '#667eea';
                         item.style.backgroundColor = '#f0f4ff';
-                    } else {
-                        item.style.borderColor = '#ddd';
+                } else {
+                    item.style.borderColor = '#ddd';
                         item.style.backgroundColor = 'transparent';
                     }
                 });
@@ -1614,16 +1622,16 @@
                                         <div style="font-weight: bold; margin-bottom: 5px;">Imagen ${index + 1}</div>
                                         <div style="font-size: 12px; color: #666;">${img.width}x${img.height}px</div>
                                         <div style="font-size: 11px; color: #999; margin-top: 2px;">${img.alt}</div>
-                                    </div>
-                                </div>
-                            `;
+                        </div>
+                    </div>
+                `;
                         });
                         clothingPreview.innerHTML = previewHTML;
                         
                         console.log(`✅ ${clothingImages.length} imágenes únicas del producto actual encontradas y listas para procesar`);
                         console.log(`📊 Eliminados ${productImages.length - clothingImages.length} duplicados`);
                         updateProcessButton();
-                    } else {
+            } else {
                         clothingPreview.innerHTML = `
                             <div style="text-align: center; padding: 20px; color: #666;">
                                 <p>❌ No se encontraron imágenes del producto actual</p>
@@ -1645,10 +1653,10 @@
                 const idLower = (imgElement.id || '').toLowerCase();
                 
                 // Patrones a excluir (más estrictos)
-                const skipPatterns = [
-                    'logo', 'icon', 'banner', 'header', 'footer', 'social',
+            const skipPatterns = [
+                'logo', 'icon', 'banner', 'header', 'footer', 'social',
                     'facebook', 'twitter', 'instagram', 'pinterest', 'youtube',
-                    'advertisement', 'ad-', 'sponsor', 'promo', 'favicon',
+                'advertisement', 'ad-', 'sponsor', 'promo', 'favicon',
                     'loading', 'placeholder', 'spinner', 'arrow', 'button',
                     'menu', 'nav', 'sidebar', 'widget', 'tooltip', 'modal',
                     'close', 'back', 'next', 'prev', 'search', 'cart',
@@ -1707,44 +1715,44 @@
                 return false;
             }
 
-            function updateProcessButton() {
-                const processButton = document.getElementById('process-button');
-                const hasUserPhoto = userPhotoFile !== null || selectedInstagramPhoto !== null;
-                const hasClothingImages = clothingImages.length > 0;
-                
-                processButton.disabled = !(hasUserPhoto && hasClothingImages);
+        function updateProcessButton() {
+            const processButton = document.getElementById('process-button');
+            const hasUserPhoto = userPhotoFile !== null || selectedInstagramPhoto !== null;
+            const hasClothingImages = clothingImages.length > 0;
+            
+            processButton.disabled = !(hasUserPhoto && hasClothingImages);
+        }
+    
+        window.processImages = async function() {
+            const hasUserPhoto = userPhotoFile !== null || selectedInstagramPhoto !== null;
+            
+            if (!hasUserPhoto || clothingImages.length === 0) {
+                showError('Por favor, sube tu foto o selecciona una de Instagram, y asegúrate de que se detectaron imágenes de productos');
+                return;
             }
-
-            window.processImages = async function() {
-                const hasUserPhoto = userPhotoFile !== null || selectedInstagramPhoto !== null;
-                
-                if (!hasUserPhoto || clothingImages.length === 0) {
-                    showError('Por favor, sube tu foto o selecciona una de Instagram, y asegúrate de que se detectaron imágenes de productos');
-                    return;
-                }
-
+    
                 document.getElementById('loading').style.display = 'block';
                 document.getElementById('result').style.display = 'none';
                 document.getElementById('error').style.display = 'none';
                 document.getElementById('process-button').disabled = true;
-
-                try {
-                    const formData = new FormData();
-                    
+    
+            try {
+                const formData = new FormData();
+                
                     // Agregar foto del usuario (archivo o Instagram)
-                    if (userPhotoFile) {
-                        formData.append('user_photo', userPhotoFile);
+                if (userPhotoFile) {
+                    formData.append('user_photo', userPhotoFile);
                         formData.append('photo_source', 'upload');
-                    } else if (selectedInstagramPhoto) {
-                        formData.append('instagram_photo_url', selectedInstagramPhoto.url);
+                } else if (selectedInstagramPhoto) {
+                    formData.append('instagram_photo_url', selectedInstagramPhoto.url);
                         formData.append('instagram_photo_id', selectedInstagramPhoto.id);
                         formData.append('photo_source', 'instagram');
-                    }
-                    
+                }
+                
                     formData.append('page_url', window.location.href);
                     
                     // Añadir URLs de imágenes de ropa en múltiples formatos para compatibilidad
-                    clothingImages.forEach((img, index) => {
+                clothingImages.forEach((img, index) => {
                         formData.append(`clothing_images[${index}]`, img.originalSrc);
                         formData.append(`clothing_url_${index}`, img.originalSrc);
                     });
@@ -1776,11 +1784,11 @@
                     }
 
                     const response = await fetch(XSMLX_CONFIG.backendUrl, {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (!response.ok) {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                if (!response.ok) {
                         let errorMessage = `Error del servidor: ${response.status}`;
                         try {
                             const errorData = await response.text();
@@ -1791,20 +1799,20 @@
                             // Ignorar error al leer respuesta
                         }
                         throw new Error(errorMessage);
-                    }
-
-                    const result = await response.json();
-                    
-                    if (result.success) {
+                }
+    
+                const result = await response.json();
+                
+                if (result.success) {
                         showResult(result.image_url);
-                    } else {
+                } else {
                         throw new Error(result.error || 'Error desconocido');
-                    }
-
-                } catch (error) {
+                }
+    
+            } catch (error) {
                     console.error('Error:', error);
                     showError(`Error al procesar: ${error.message}`);
-                } finally {
+            } finally {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('process-button').disabled = false;
                 }
@@ -1825,7 +1833,7 @@
                 resultDiv.style.display = 'block';
             }
 
-            function showError(message) {
+        function showError(message) {
                 const errorDiv = document.getElementById('error');
                 errorDiv.textContent = message;
                 errorDiv.style.display = 'block';
@@ -1842,7 +1850,84 @@
                 return 'main';
             }
 
-            function initWidget() {
+            // Función para cargar snippet dinámicamente desde GitHub
+            async function loadDynamicSnippet() {
+                if (!XSMLX_CONFIG.snippetSource.enabled) {
+                    return false;
+                }
+                
+                try {
+                    const { githubRepo, branch, filePath } = XSMLX_CONFIG.snippetSource;
+                    const githubUrl = `https://raw.githubusercontent.com/${githubRepo}/${branch}/${filePath}`;
+                    
+                    console.log('🔄 Cargando snippet dinámicamente desde:', githubUrl);
+                    
+                    const response = await fetch(githubUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'text/html, application/javascript, text/javascript, */*'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const content = await response.text();
+                    
+                    // Si es un archivo HTML, extraer solo el JavaScript
+                    let snippetCode = content;
+                    if (filePath.endsWith('.html')) {
+                        // Buscar el contenido dentro de <script> tags
+                        const scriptMatch = content.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
+                        if (scriptMatch && scriptMatch[1]) {
+                            snippetCode = scriptMatch[1].trim();
+                        } else {
+                            throw new Error('No se encontró código JavaScript en el archivo HTML');
+                        }
+                    }
+                    
+                    // Ejecutar el código del snippet
+                    const script = document.createElement('script');
+                    script.textContent = snippetCode;
+                    document.head.appendChild(script);
+                    
+                    console.log('✅ Snippet cargado dinámicamente desde GitHub');
+                    return true;
+                    
+                } catch (error) {
+                    console.warn('⚠️ Error cargando snippet dinámico:', error.message);
+                    return false;
+                }
+            }
+            
+            async function initWidget() {
+                // Intentar cargar snippet dinámicamente primero
+                if (XSMLX_CONFIG.snippetSource.enabled) {
+                    const dynamicLoaded = await loadDynamicSnippet();
+                    
+                    if (dynamicLoaded) {
+                        // Esperar un poco para que el snippet dinámico se inicialice
+                        setTimeout(() => {
+                            // Verificar si el snippet dinámico creó el widget
+                            if (document.querySelector('[id^="xsmlx-widget-"]')) {
+                                console.log('✅ Snippet dinámico cargado y widget creado desde GitHub');
+                                return;
+                            } else {
+                                console.log('⚠️ Snippet dinámico cargado pero no creó widget, usando fallback local');
+                                initLocalWidget();
+                            }
+                        }, 1000);
+                        return;
+                    }
+                }
+                
+                // Fallback: usar código local
+                console.log('🔄 Usando snippet local (fallback)');
+                initLocalWidget();
+            }
+            
+            function initLocalWidget() {
                 const widgetContainer = document.createElement('div');
                 widgetContainer.innerHTML = createXsmlxWidget();
                 document.body.appendChild(widgetContainer);
@@ -1873,12 +1958,12 @@
                     }
                 }, 500); // Verificar cada 500ms
                 
-                console.log('XSMLX Widget cargado y visible');
+                console.log('XSMLX Widget cargado y visible (local)');
             }
 
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', initWidget);
-            } else {
+                    } else {
                 initWidget();
             }
 
