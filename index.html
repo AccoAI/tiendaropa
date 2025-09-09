@@ -406,6 +406,22 @@
                 opacity: 1;
             }
         }
+
+        /* Estilos para tabs de productos */
+        .product-tab:hover {
+            border-color: #667eea !important;
+            background: #f0f4ff !important;
+            color: #667eea !important;
+        }
+
+        .product-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .product-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -427,7 +443,9 @@
     </header>
 
     <div class="container">
-        <div class="product-page">
+        <!-- Contenido del Producto Principal -->
+        <div id="main-product" class="product-content active">
+            <div class="product-page">
             <!-- Product Images Gallery -->
             <div class="product-gallery">
                 <div class="main-image">
@@ -507,85 +525,385 @@
                 </div>
             </div>
         </div>
+        </div>
+
+        <!-- Contenido de Camisetas -->
+        <div id="camisetas-product" class="product-content">
+            <div class="product-page">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="ROPA/2/I2651710899009_1.webp" alt="Camisetas Básicas" id="camisetasMainImage" loading="lazy">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <img src="ROPA/2/I2651710899009_1.webp" alt="Vista 1" class="thumbnail active" onclick="changeMainImage('ROPA/2/I2651710899009_1.webp', 'camisetasMainImage')" loading="lazy">
+                        <img src="ROPA/2/SHI26517108990_09_POS_01.webp" alt="Vista 2" class="thumbnail" onclick="changeMainImage('ROPA/2/SHI26517108990_09_POS_01.webp', 'camisetasMainImage')" loading="lazy">
+                        <img src="ROPA/2/SHI26517108990_09_POS_02.webp" alt="Vista 3" class="thumbnail" onclick="changeMainImage('ROPA/2/SHI26517108990_09_POS_02.webp', 'camisetasMainImage')" loading="lazy">
+                        <img src="ROPA/2/SHI26517108990_09_POS_03.webp" alt="Vista 4" class="thumbnail" onclick="changeMainImage('ROPA/2/SHI26517108990_09_POS_03.webp', 'camisetasMainImage')" loading="lazy">
+                        <img src="ROPA/2/SHI26517108990_09_POS_04_9bd9c2a7-8f7c-40f0-8889-dff5aa6a7682.webp" alt="Vista 5" class="thumbnail" onclick="changeMainImage('ROPA/2/SHI26517108990_09_POS_04_9bd9c2a7-8f7c-40f0-8889-dff5aa6a7682.webp', 'camisetasMainImage')" loading="lazy">
+                        <img src="ROPA/2/SHI26517108990_09_POS_10.webp" alt="Vista 6" class="thumbnail" onclick="changeMainImage('ROPA/2/SHI26517108990_09_POS_10.webp', 'camisetasMainImage')" loading="lazy">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="badge new">NUEVO</div>
+                    <h1 class="product-title">Camisetas Básicas Premium</h1>
+                    <div class="product-price">€24.99</div>
+                    <div class="product-description">
+                        <p>Camisetas básicas de alta calidad, perfectas para el día a día. Fabricadas con algodón 100% orgánico, ofrecen máxima comodidad y durabilidad.</p>
+                        <h3>Características:</h3>
+                        <ul>
+                            <li>100% Algodón orgánico</li>
+                            <li>Corte clásico y cómodo</li>
+                            <li>Resistente al lavado</li>
+                            <li>No se encoge</li>
+                            <li>Colores disponibles: Blanco, Negro, Gris</li>
+                        </ul>
+                    </div>
+                    <div class="size-selector">
+                        <h3>Talla:</h3>
+                        <div class="size-options">
+                            <div class="size-option" data-size="S">S</div>
+                            <div class="size-option selected" data-size="M">M</div>
+                            <div class="size-option" data-size="L">L</div>
+                            <div class="size-option" data-size="XL">XL</div>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn" onclick="addToCart()">🛒 Añadir al Carrito</button>
+                        <button class="buy-now-btn" onclick="buyNow()">💳 Comprar Ahora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido de Casual -->
+        <div id="casual-product" class="product-content">
+            <div class="product-page">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="ROPA/3/133755_1.webp" alt="Ropa Casual" id="casualMainImage" loading="lazy">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <img src="ROPA/3/133755_1.webp" alt="Vista 1" class="thumbnail active" onclick="changeMainImage('ROPA/3/133755_1.webp', 'casualMainImage')" loading="lazy">
+                        <img src="ROPA/3/133755_2.webp" alt="Vista 2" class="thumbnail" onclick="changeMainImage('ROPA/3/133755_2.webp', 'casualMainImage')" loading="lazy">
+                        <img src="ROPA/3/133755_3.webp" alt="Vista 3" class="thumbnail" onclick="changeMainImage('ROPA/3/133755_3.webp', 'casualMainImage')" loading="lazy">
+                        <img src="ROPA/3/133755_4.webp" alt="Vista 4" class="thumbnail" onclick="changeMainImage('ROPA/3/133755_4.webp', 'casualMainImage')" loading="lazy">
+                        <img src="ROPA/3/133755_5.webp" alt="Vista 5" class="thumbnail" onclick="changeMainImage('ROPA/3/133755_5.webp', 'casualMainImage')" loading="lazy">
+                        <img src="ROPA/3/133755_10.webp" alt="Vista 6" class="thumbnail" onclick="changeMainImage('ROPA/3/133755_10.webp', 'casualMainImage')" loading="lazy">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="badge new">NUEVO</div>
+                    <h1 class="product-title">Colección Casual Premium</h1>
+                    <div class="product-price">€39.99</div>
+                    <div class="product-description">
+                        <p>Ropa casual de alta calidad perfecta para cualquier ocasión. Diseño moderno y cómodo que combina estilo y funcionalidad.</p>
+                        <h3>Características:</h3>
+                        <ul>
+                            <li>Material premium y suave</li>
+                            <li>Corte moderno y cómodo</li>
+                            <li>Fácil cuidado y mantenimiento</li>
+                            <li>Colores vibrantes y duraderos</li>
+                            <li>Perfecto para cualquier temporada</li>
+                        </ul>
+                    </div>
+                    <div class="size-selector">
+                        <h3>Talla:</h3>
+                        <div class="size-options">
+                            <div class="size-option" data-size="S">S</div>
+                            <div class="size-option selected" data-size="M">M</div>
+                            <div class="size-option" data-size="L">L</div>
+                            <div class="size-option" data-size="XL">XL</div>
+                            <div class="size-option" data-size="XXL">XXL</div>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn" onclick="addToCart()">🛒 Añadir al Carrito</button>
+                        <button class="buy-now-btn" onclick="buyNow()">💳 Comprar Ahora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido de Formal -->
+        <div id="formal-product" class="product-content">
+            <div class="product-page">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="ROPA/4/GWF00922.F007393-55667.avif" alt="Ropa Formal" id="formalMainImage" loading="lazy">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <img src="ROPA/4/GWF00922.F007393-55667.avif" alt="Vista 1" class="thumbnail active" onclick="changeMainImage('ROPA/4/GWF00922.F007393-55667.avif', 'formalMainImage')" loading="lazy">
+                        <img src="ROPA/4/GWF00922.F007393-55667-2.avif" alt="Vista 2" class="thumbnail" onclick="changeMainImage('ROPA/4/GWF00922.F007393-55667-2.avif', 'formalMainImage')" loading="lazy">
+                        <img src="ROPA/4/GWF00922.F007393-55667-3.avif" alt="Vista 3" class="thumbnail" onclick="changeMainImage('ROPA/4/GWF00922.F007393-55667-3.avif', 'formalMainImage')" loading="lazy">
+                        <img src="ROPA/4/GWF00922.F007393-55667-4.avif" alt="Vista 4" class="thumbnail" onclick="changeMainImage('ROPA/4/GWF00922.F007393-55667-4.avif', 'formalMainImage')" loading="lazy">
+                        <img src="ROPA/4/GWF00922.F007393-55667-5.avif" alt="Vista 5" class="thumbnail" onclick="changeMainImage('ROPA/4/GWF00922.F007393-55667-5.avif', 'formalMainImage')" loading="lazy">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="badge new">NUEVO</div>
+                    <h1 class="product-title">Colección Formal Elegante</h1>
+                    <div class="product-price">€89.99</div>
+                    <div class="product-description">
+                        <p>Ropa formal de alta gama para ocasiones especiales. Diseño elegante y sofisticado que transmite profesionalismo y estilo.</p>
+                        <h3>Características:</h3>
+                        <ul>
+                            <li>Material premium de alta calidad</li>
+                            <li>Corte impecable y elegante</li>
+                            <li>Acabados de lujo</li>
+                            <li>Colores clásicos y sofisticados</li>
+                            <li>Perfecto para eventos formales</li>
+                        </ul>
+                    </div>
+                    <div class="size-selector">
+                        <h3>Talla:</h3>
+                        <div class="size-options">
+                            <div class="size-option" data-size="S">S</div>
+                            <div class="size-option selected" data-size="M">M</div>
+                            <div class="size-option" data-size="L">L</div>
+                            <div class="size-option" data-size="XL">XL</div>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn" onclick="addToCart()">🛒 Añadir al Carrito</button>
+                        <button class="buy-now-btn" onclick="buyNow()">💳 Comprar Ahora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido de Deportiva -->
+        <div id="deportiva-product" class="product-content">
+            <div class="product-page">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="ROPA/5/252BR0413_10600_D_10.jpg" alt="Ropa Deportiva" id="deportivaMainImage" loading="lazy">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <img src="ROPA/5/252BR0413_10600_D_10.jpg" alt="Vista 1" class="thumbnail active" onclick="changeMainImage('ROPA/5/252BR0413_10600_D_10.jpg', 'deportivaMainImage')" loading="lazy">
+                        <img src="ROPA/5/252BR0413_10600_D_15.jpg" alt="Vista 2" class="thumbnail" onclick="changeMainImage('ROPA/5/252BR0413_10600_D_15.jpg', 'deportivaMainImage')" loading="lazy">
+                        <img src="ROPA/5/252BR0413_10600_D_2.jpg" alt="Vista 3" class="thumbnail" onclick="changeMainImage('ROPA/5/252BR0413_10600_D_2.jpg', 'deportivaMainImage')" loading="lazy">
+                        <img src="ROPA/5/252BR0413_10600_D_3.webp" alt="Vista 4" class="thumbnail" onclick="changeMainImage('ROPA/5/252BR0413_10600_D_3.webp', 'deportivaMainImage')" loading="lazy">
+                        <img src="ROPA/5/252BR0413_10600_D_4.jpg" alt="Vista 5" class="thumbnail" onclick="changeMainImage('ROPA/5/252BR0413_10600_D_4.jpg', 'deportivaMainImage')" loading="lazy">
+                        <img src="ROPA/5/252BR0413_10600_D_5.jpg" alt="Vista 6" class="thumbnail" onclick="changeMainImage('ROPA/5/252BR0413_10600_D_5.jpg', 'deportivaMainImage')" loading="lazy">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="badge new">NUEVO</div>
+                    <h1 class="product-title">Ropa Deportiva Performance</h1>
+                    <div class="product-price">€49.99</div>
+                    <div class="product-description">
+                        <p>Ropa deportiva de alto rendimiento diseñada para atletas y deportistas. Tecnología avanzada que mejora el rendimiento y la comodidad durante el ejercicio.</p>
+                        <h3>Características:</h3>
+                        <ul>
+                            <li>Tecnología de secado rápido</li>
+                            <li>Material transpirable y ligero</li>
+                            <li>Corte ergonómico para el movimiento</li>
+                            <li>Resistente al sudor y olores</li>
+                            <li>Ideal para deportes de alta intensidad</li>
+                        </ul>
+                    </div>
+                    <div class="size-selector">
+                        <h3>Talla:</h3>
+                        <div class="size-options">
+                            <div class="size-option" data-size="S">S</div>
+                            <div class="size-option selected" data-size="M">M</div>
+                            <div class="size-option" data-size="L">L</div>
+                            <div class="size-option" data-size="XL">XL</div>
+                            <div class="size-option" data-size="XXL">XXL</div>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn" onclick="addToCart()">🛒 Añadir al Carrito</button>
+                        <button class="buy-now-btn" onclick="buyNow()">💳 Comprar Ahora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido de Temporada -->
+        <div id="temporada-product" class="product-content">
+            <div class="product-page">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="ROPA/6/252BBAJ7Z_10607_D_15.webp" alt="Ropa de Temporada" id="temporadaMainImage" loading="lazy">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <img src="ROPA/6/252BBAJ7Z_10607_D_15.webp" alt="Vista 1" class="thumbnail active" onclick="changeMainImage('ROPA/6/252BBAJ7Z_10607_D_15.webp', 'temporadaMainImage')" loading="lazy">
+                        <img src="ROPA/6/252BBAJ7Z_10607_D_2.webp" alt="Vista 2" class="thumbnail" onclick="changeMainImage('ROPA/6/252BBAJ7Z_10607_D_2.webp', 'temporadaMainImage')" loading="lazy">
+                        <img src="ROPA/6/252BBAJ7Z_10607_D_3.jpg" alt="Vista 3" class="thumbnail" onclick="changeMainImage('ROPA/6/252BBAJ7Z_10607_D_3.jpg', 'temporadaMainImage')" loading="lazy">
+                        <img src="ROPA/6/252BBAJ7Z_10607_D_4.webp" alt="Vista 4" class="thumbnail" onclick="changeMainImage('ROPA/6/252BBAJ7Z_10607_D_4.webp', 'temporadaMainImage')" loading="lazy">
+                        <img src="ROPA/6/252BBAJ7Z_10607_D_8.webp" alt="Vista 5" class="thumbnail" onclick="changeMainImage('ROPA/6/252BBAJ7Z_10607_D_8.webp', 'temporadaMainImage')" loading="lazy">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="badge new">NUEVO</div>
+                    <h1 class="product-title">Colección de Temporada</h1>
+                    <div class="product-price">€34.99</div>
+                    <div class="product-description">
+                        <p>Ropa de temporada con diseños únicos y tendencias actuales. Perfecta para estar a la moda en cualquier época del año.</p>
+                        <h3>Características:</h3>
+                        <ul>
+                            <li>Diseños de temporada exclusivos</li>
+                            <li>Materiales de calidad premium</li>
+                            <li>Colores y estampados únicos</li>
+                            <li>Versátil para diferentes ocasiones</li>
+                            <li>Edición limitada</li>
+                        </ul>
+                    </div>
+                    <div class="size-selector">
+                        <h3>Talla:</h3>
+                        <div class="size-options">
+                            <div class="size-option" data-size="S">S</div>
+                            <div class="size-option selected" data-size="M">M</div>
+                            <div class="size-option" data-size="L">L</div>
+                            <div class="size-option" data-size="XL">XL</div>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn" onclick="addToCart()">🛒 Añadir al Carrito</button>
+                        <button class="buy-now-btn" onclick="buyNow()">💳 Comprar Ahora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido de Hoodie -->
+        <div id="hoodie-product" class="product-content">
+            <div class="product-page">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="ROPA/7/f_800x.webp" alt="Hoodie Premium" id="hoodieMainImage" loading="lazy">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <img src="ROPA/7/f_800x.webp" alt="Vista 1" class="thumbnail active" onclick="changeMainImage('ROPA/7/f_800x.webp', 'hoodieMainImage')" loading="lazy">
+                        <img src="ROPA/7/HOT_HOODIE_GREY_MELANGE_front_800x.webp" alt="Vista 2" class="thumbnail" onclick="changeMainImage('ROPA/7/HOT_HOODIE_GREY_MELANGE_front_800x.webp', 'hoodieMainImage')" loading="lazy">
+                        <img src="ROPA/7/HOT_HOODIE_GREY_MELANGE_back_800x.webp" alt="Vista 3" class="thumbnail" onclick="changeMainImage('ROPA/7/HOT_HOODIE_GREY_MELANGE_back_800x.webp', 'hoodieMainImage')" loading="lazy">
+                        <img src="ROPA/7/HOT_HOODIE_GREY_MELANGE_detail_1_800x.jpg" alt="Vista 4" class="thumbnail" onclick="changeMainImage('ROPA/7/HOT_HOODIE_GREY_MELANGE_detail_1_800x.jpg', 'hoodieMainImage')" loading="lazy">
+                        <img src="ROPA/7/IMG_1746_model_men_800x.webp" alt="Vista 5" class="thumbnail" onclick="changeMainImage('ROPA/7/IMG_1746_model_men_800x.webp', 'hoodieMainImage')" loading="lazy">
+                        <img src="ROPA/7/NUDEPROJECT_NEWINJULY1093_800x.webp" alt="Vista 6" class="thumbnail" onclick="changeMainImage('ROPA/7/NUDEPROJECT_NEWINJULY1093_800x.webp', 'hoodieMainImage')" loading="lazy">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="badge new">NUEVO</div>
+                    <h1 class="product-title">Hoodie Premium Grey Melange</h1>
+                    <div class="product-price">€69.99</div>
+                    <div class="product-description">
+                        <p>Hoodie premium de alta calidad con capucha y bolsillo canguro. Diseño moderno y cómodo perfecto para el día a día.</p>
+                        <h3>Características:</h3>
+                        <ul>
+                            <li>Material premium suave y cálido</li>
+                            <li>Capucha ajustable con cordones</li>
+                            <li>Bolsillo canguro espacioso</li>
+                            <li>Corte moderno y cómodo</li>
+                            <li>Color gris melange elegante</li>
+                        </ul>
+                    </div>
+                    <div class="size-selector">
+                        <h3>Talla:</h3>
+                        <div class="size-options">
+                            <div class="size-option" data-size="S">S</div>
+                            <div class="size-option selected" data-size="M">M</div>
+                            <div class="size-option" data-size="L">L</div>
+                            <div class="size-option" data-size="XL">XL</div>
+                            <div class="size-option" data-size="XXL">XXL</div>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn" onclick="addToCart()">🛒 Añadir al Carrito</button>
+                        <button class="buy-now-btn" onclick="buyNow()">💳 Comprar Ahora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Sección de Productos -->
-    <section id="products" style="padding: 60px 20px; background: #f8f9fa;">
+    <!-- Tabs de Navegación de Productos -->
+    <section id="product-tabs" style="padding: 40px 20px 20px; background: white; border-bottom: 1px solid #eee;">
         <div style="max-width: 1200px; margin: 0 auto;">
-            <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 50px; color: #333; font-weight: 700;">Nuestra Colección</h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
-                <!-- Producto 2 - Camisetas Básicas -->
-                <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'">
-                    <a href="producto-2.html" style="text-decoration: none; color: inherit;">
-                        <img src="ROPA/2/I2651710899009_1.webp" alt="Camisetas Básicas" style="width: 100%; height: 250px; object-fit: cover;">
-                        <div style="padding: 20px;">
-                            <h3 style="font-size: 1.3em; margin-bottom: 10px; color: #333;">Camisetas Básicas Premium</h3>
-                            <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">Algodón 100% orgánico, perfectas para el día a día</p>
-                            <div style="font-size: 1.4em; font-weight: bold; color: #e74c3c;">€24.99</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Producto 3 - Ropa Casual -->
-                <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'">
-                    <a href="producto-3.html" style="text-decoration: none; color: inherit;">
-                        <img src="ROPA/3/133755_1.webp" alt="Ropa Casual" style="width: 100%; height: 250px; object-fit: cover;">
-                        <div style="padding: 20px;">
-                            <h3 style="font-size: 1.3em; margin-bottom: 10px; color: #333;">Colección Casual Premium</h3>
-                            <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">Diseño moderno y cómodo para cualquier ocasión</p>
-                            <div style="font-size: 1.4em; font-weight: bold; color: #e74c3c;">€39.99</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Producto 4 - Ropa Formal -->
-                <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'">
-                    <a href="producto-4.html" style="text-decoration: none; color: inherit;">
-                        <img src="ROPA/4/GWF00922.F007393-55667.avif" alt="Ropa Formal" style="width: 100%; height: 250px; object-fit: cover;">
-                        <div style="padding: 20px;">
-                            <h3 style="font-size: 1.3em; margin-bottom: 10px; color: #333;">Colección Formal Elegante</h3>
-                            <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">Alta gama para ocasiones especiales</p>
-                            <div style="font-size: 1.4em; font-weight: bold; color: #e74c3c;">€89.99</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Producto 5 - Ropa Deportiva -->
-                <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'">
-                    <a href="producto-5.html" style="text-decoration: none; color: inherit;">
-                        <img src="ROPA/5/252BR0413_10600_D_10.jpg" alt="Ropa Deportiva" style="width: 100%; height: 250px; object-fit: cover;">
-                        <div style="padding: 20px;">
-                            <h3 style="font-size: 1.3em; margin-bottom: 10px; color: #333;">Ropa Deportiva Performance</h3>
-                            <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">Tecnología avanzada para atletas</p>
-                            <div style="font-size: 1.4em; font-weight: bold; color: #e74c3c;">€49.99</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Producto 6 - Ropa de Temporada -->
-                <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'">
-                    <a href="producto-6.html" style="text-decoration: none; color: inherit;">
-                        <img src="ROPA/6/252BBAJ7Z_10607_D_15.webp" alt="Ropa de Temporada" style="width: 100%; height: 250px; object-fit: cover;">
-                        <div style="padding: 20px;">
-                            <h3 style="font-size: 1.3em; margin-bottom: 10px; color: #333;">Colección de Temporada</h3>
-                            <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">Diseños únicos y tendencias actuales</p>
-                            <div style="font-size: 1.4em; font-weight: bold; color: #e74c3c;">€34.99</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Producto 7 - Hoodie -->
-                <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'">
-                    <a href="producto-7.html" style="text-decoration: none; color: inherit;">
-                        <img src="ROPA/7/f_800x.webp" alt="Hoodie Premium" style="width: 100%; height: 250px; object-fit: cover;">
-                        <div style="padding: 20px;">
-                            <h3 style="font-size: 1.3em; margin-bottom: 10px; color: #333;">Hoodie Premium Grey Melange</h3>
-                            <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">Material premium con capucha y bolsillo canguro</p>
-                            <div style="font-size: 1.4em; font-weight: bold; color: #e74c3c;">€69.99</div>
-                        </div>
-                    </a>
-                </div>
+            <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <button class="product-tab active" onclick="showProduct('main')" style="
+                    padding: 12px 24px;
+                    border: 2px solid #667eea;
+                    background: #667eea;
+                    color: white;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    font-size: 14px;
+                ">🏠 Principal</button>
+                
+                <button class="product-tab" onclick="showProduct('camisetas')" style="
+                    padding: 12px 24px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    color: #333;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    font-size: 14px;
+                ">👕 Camisetas</button>
+                
+                <button class="product-tab" onclick="showProduct('casual')" style="
+                    padding: 12px 24px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    color: #333;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    font-size: 14px;
+                ">👔 Casual</button>
+                
+                <button class="product-tab" onclick="showProduct('formal')" style="
+                    padding: 12px 24px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    color: #333;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    font-size: 14px;
+                ">🤵 Formal</button>
+                
+                <button class="product-tab" onclick="showProduct('deportiva')" style="
+                    padding: 12px 24px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    color: #333;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    font-size: 14px;
+                ">🏃 Deportiva</button>
+                
+                <button class="product-tab" onclick="showProduct('temporada')" style="
+                    padding: 12px 24px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    color: #333;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    font-size: 14px;
+                ">🌸 Temporada</button>
+                
+                <button class="product-tab" onclick="showProduct('hoodie')" style="
+                    padding: 12px 24px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    color: #333;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    font-size: 14px;
+                ">🧥 Hoodie</button>
             </div>
         </div>
     </section>
@@ -613,13 +931,66 @@
             });
         });
 
-        function changeMainImage(imageSrc) {
-            document.getElementById('mainImage').src = imageSrc;
+        function changeMainImage(imageSrc, targetId = 'mainImage') {
+            document.getElementById(targetId).src = imageSrc;
             
             // Update active thumbnail
             const thumbnails = document.querySelectorAll('.thumbnail');
             thumbnails.forEach(thumb => thumb.classList.remove('active'));
             event.target.classList.add('active');
+        }
+
+        // Función para mostrar productos
+        function showProduct(productType) {
+            // Ocultar todos los contenidos
+            const allContents = document.querySelectorAll('.product-content');
+            allContents.forEach(content => content.classList.remove('active'));
+            
+            // Remover clase active de todos los tabs
+            const allTabs = document.querySelectorAll('.product-tab');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.style.borderColor = '#ddd';
+                tab.style.background = 'white';
+                tab.style.color = '#333';
+            });
+            
+            // Mostrar el contenido seleccionado
+            let targetContent;
+            switch(productType) {
+                case 'main':
+                    targetContent = document.getElementById('main-product');
+                    break;
+                case 'camisetas':
+                    targetContent = document.getElementById('camisetas-product');
+                    break;
+                case 'casual':
+                    targetContent = document.getElementById('casual-product');
+                    break;
+                case 'formal':
+                    targetContent = document.getElementById('formal-product');
+                    break;
+                case 'deportiva':
+                    targetContent = document.getElementById('deportiva-product');
+                    break;
+                case 'temporada':
+                    targetContent = document.getElementById('temporada-product');
+                    break;
+                case 'hoodie':
+                    targetContent = document.getElementById('hoodie-product');
+                    break;
+            }
+            
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+            
+            // Activar el tab correspondiente
+            const activeTab = event.target;
+            activeTab.classList.add('active');
+            activeTab.style.borderColor = '#667eea';
+            activeTab.style.background = '#667eea';
+            activeTab.style.color = 'white';
         }
 
         function increaseQuantity() {
