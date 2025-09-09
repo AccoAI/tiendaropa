@@ -929,6 +929,9 @@
                     selectedSize = this.getAttribute('data-size');
                 });
             });
+            
+            // Cargar producto desde URL al cargar la página
+            loadProductFromUrl();
         });
 
         function changeMainImage(imageSrc, targetId = 'mainImage') {
@@ -957,27 +960,44 @@
             
             // Mostrar el contenido seleccionado
             let targetContent;
+            let newUrl;
+            let pageTitle;
+            
             switch(productType) {
                 case 'main':
                     targetContent = document.getElementById('main-product');
+                    newUrl = '/';
+                    pageTitle = 'StyleHub - Moda Premium';
                     break;
                 case 'camisetas':
                     targetContent = document.getElementById('camisetas-product');
+                    newUrl = '/camisetas';
+                    pageTitle = 'Camisetas Básicas Premium - StyleHub';
                     break;
                 case 'casual':
                     targetContent = document.getElementById('casual-product');
+                    newUrl = '/casual';
+                    pageTitle = 'Colección Casual Premium - StyleHub';
                     break;
                 case 'formal':
                     targetContent = document.getElementById('formal-product');
+                    newUrl = '/formal';
+                    pageTitle = 'Colección Formal Elegante - StyleHub';
                     break;
                 case 'deportiva':
                     targetContent = document.getElementById('deportiva-product');
+                    newUrl = '/deportiva';
+                    pageTitle = 'Ropa Deportiva Performance - StyleHub';
                     break;
                 case 'temporada':
                     targetContent = document.getElementById('temporada-product');
+                    newUrl = '/temporada';
+                    pageTitle = 'Colección de Temporada - StyleHub';
                     break;
                 case 'hoodie':
                     targetContent = document.getElementById('hoodie-product');
+                    newUrl = '/hoodie';
+                    pageTitle = 'Hoodie Premium Grey Melange - StyleHub';
                     break;
             }
             
@@ -991,7 +1011,59 @@
             activeTab.style.borderColor = '#667eea';
             activeTab.style.background = '#667eea';
             activeTab.style.color = 'white';
+            
+            // Actualizar URL y título de la página
+            if (newUrl && pageTitle) {
+                window.history.pushState({product: productType}, pageTitle, newUrl);
+                document.title = pageTitle;
+            }
         }
+
+        // Función para cargar producto desde URL
+        function loadProductFromUrl() {
+            const path = window.location.pathname;
+            let productType = 'main';
+            
+            switch(path) {
+                case '/camisetas':
+                    productType = 'camisetas';
+                    break;
+                case '/casual':
+                    productType = 'casual';
+                    break;
+                case '/formal':
+                    productType = 'formal';
+                    break;
+                case '/deportiva':
+                    productType = 'deportiva';
+                    break;
+                case '/temporada':
+                    productType = 'temporada';
+                    break;
+                case '/hoodie':
+                    productType = 'hoodie';
+                    break;
+                default:
+                    productType = 'main';
+            }
+            
+            // Simular click en el tab correspondiente
+            const tabButtons = document.querySelectorAll('.product-tab');
+            tabButtons.forEach(button => {
+                if (button.onclick && button.onclick.toString().includes(productType)) {
+                    button.click();
+                }
+            });
+        }
+
+        // Manejar navegación del navegador (botones atrás/adelante)
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.product) {
+                loadProductFromUrl();
+            } else {
+                loadProductFromUrl();
+            }
+        });
 
         function increaseQuantity() {
             quantity++;
