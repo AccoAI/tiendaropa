@@ -11,11 +11,15 @@
     // Crear el widget
     function createXsmlxWidget() {
         return `
-            <div id="${XSMLX_CONFIG.widgetId}" style="
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                display: inline-block;
-                margin: 10px;
-            ">
+                <div id="${XSMLX_CONFIG.widgetId}" style="
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    display: inline-block;
+                    margin: 10px;
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    z-index: 9999;
+                ">
                 <button onclick="openXsmlxModal('${XSMLX_CONFIG.widgetId}')" style="
                     width: 80px;
                     height: 40px;
