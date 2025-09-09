@@ -1591,7 +1591,19 @@
                     });
                 
                     if (productImages.length > 0) {
-                        clothingImages = productImages.slice(0, 15);
+                        // Eliminar duplicados basándose en la URL original
+                        const uniqueImages = [];
+                        const seenUrls = new Set();
+                        
+                        productImages.forEach(img => {
+                            if (!seenUrls.has(img.originalSrc)) {
+                                seenUrls.add(img.originalSrc);
+                                uniqueImages.push(img);
+                            }
+                        });
+                        
+                        // Limitar a máximo 5 imágenes para evitar errores del backend
+                        clothingImages = uniqueImages.slice(0, 5);
                         
                         let previewHTML = `<h4>Imágenes del producto actual (${clothingImages.length}):</h4>`;
                         clothingImages.forEach((img, index) => {
@@ -1608,7 +1620,8 @@
                         });
                         clothingPreview.innerHTML = previewHTML;
                         
-                        console.log(`✅ ${clothingImages.length} imágenes del producto actual encontradas y listas para procesar`);
+                        console.log(`✅ ${clothingImages.length} imágenes únicas del producto actual encontradas y listas para procesar`);
+                        console.log(`📊 Eliminados ${productImages.length - clothingImages.length} duplicados`);
                         updateProcessButton();
                     } else {
                         clothingPreview.innerHTML = `
@@ -1730,8 +1743,21 @@
                     
                     formData.append('page_url', window.location.href);
                     
+                    // Añadir solo URLs únicas de imágenes de ropa (sin timestamp)
                     clothingImages.forEach((img, index) => {
-                        formData.append(`clothing_url_${index}`, img.src);
+                        formData.append(`clothing_url_${index}`, img.originalSrc);
+                    });
+                    
+                    // Añadir metadata adicional
+                    formData.append('clothing_count', clothingImages.length.toString());
+                    formData.append('product_type', getCurrentProductType());
+                    
+                    // Log para debug
+                    console.log('📤 Enviando al backend:', {
+                        user_photo: userPhotoFile ? 'file' : selectedInstagramPhoto ? 'instagram' : 'none',
+                        clothing_images: clothingImages.length,
+                        product_type: getCurrentProductType(),
+                        page_url: window.location.href
                     });
 
                     const response = await fetch(XSMLX_CONFIG.backendUrl, {
@@ -1740,7 +1766,16 @@
                     });
 
                     if (!response.ok) {
-                        throw new Error(`Error del servidor: ${response.status}`);
+                        let errorMessage = `Error del servidor: ${response.status}`;
+                        try {
+                            const errorData = await response.text();
+                            if (errorData) {
+                                errorMessage += ` - ${errorData}`;
+                            }
+                        } catch (e) {
+                            // Ignorar error al leer respuesta
+                        }
+                        throw new Error(errorMessage);
                     }
 
                     const result = await response.json();
@@ -1779,6 +1814,17 @@
                 const errorDiv = document.getElementById('error');
                 errorDiv.textContent = message;
                 errorDiv.style.display = 'block';
+            }
+
+            function getCurrentProductType() {
+                const currentPath = window.location.pathname;
+                if (currentPath.includes('/camisetas')) return 'camisetas';
+                if (currentPath.includes('/casual')) return 'casual';
+                if (currentPath.includes('/formal')) return 'formal';
+                if (currentPath.includes('/deportiva')) return 'deportiva';
+                if (currentPath.includes('/temporada')) return 'temporada';
+                if (currentPath.includes('/hoodie')) return 'hoodie';
+                return 'main';
             }
 
             function initWidget() {
